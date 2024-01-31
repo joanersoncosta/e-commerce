@@ -2,3 +2,27 @@ server:
  servlet:
    context-path: /siteware/api
    
+spring:    
+  data:
+    mongodb:
+      authentication-database: admin
+      uri: ${MONGO_DB_URI:mongodb+srv://sitewareDB:tPl8WGO7R2Y4TSfP@wakandadev.cjsar7m.mongodb.net/sitewareDB?retryWrites=true&w=majority}
+      auto-index-creation: true
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
