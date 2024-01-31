@@ -1,5 +1,6 @@
 package br.com.siteware.cliente.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import br.com.siteware.cliente.application.api.ClienteNovoRequest;
 import br.com.siteware.cliente.domain.enuns.Sexo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -35,17 +37,17 @@ public class Cliente {
 	@NotNull
 	private Sexo sexo;
 	@NotNull
-	private String dataNascimento;
+	private LocalDate dataNascimento;
 
 	private LocalDateTime momentoDoDacastro;
 	private LocalDateTime dataHoraDaultimaAlteracao;
 
-	public Cliente(String nome, String email, Sexo sexo, String dataNascimento) {
+	public Cliente(ClienteNovoRequest clienteRequest) {
 		this.idCliente = UUID.randomUUID();
-		this.nome = nome;
-		this.email = email;
-		this.sexo = sexo;
-		this.dataNascimento = dataNascimento;
+		this.nome = clienteRequest.getNome();
+		this.email = clienteRequest.getEmail();
+		this.sexo = clienteRequest.getSexo();
+		this.dataNascimento = LocalDate.parse(clienteRequest.getDataNascimento());
 		this.momentoDoDacastro = LocalDateTime.now();
 	}
 
