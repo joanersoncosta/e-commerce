@@ -40,4 +40,14 @@ public class ClienteApplicationService implements ClienteService {
 
 	}
 
+	@Override
+	public Cliente detalhaClientePorId(UUID idCliente) {
+		log.info("[inicia] ClienteApplicationService - buscaClientePorId");
+		log.info("[idCliente] {}", idCliente);
+		var cliente = clienteRepository.detalhaClientePorId(idCliente)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
+		log.info("[finaliza] ClienteApplicationService - buscaClientePorId");
+		return cliente;
+	}
+
 }
