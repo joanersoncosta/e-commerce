@@ -1,5 +1,6 @@
 package br.com.siteware.cliente.infra;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,6 +47,14 @@ public class ClienteInfraRepository implements ClienteRepository {
 			APIException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado para esse email."));
 		log.info("[inicia] ClienteInfraRepository - detalhaClientePorEmail");
 		return cliente;
+	}
+
+	@Override
+	public List<Cliente> buscaClientes() {
+		log.info("[inicia] ClienteInfraRepository - buscaClientes");
+		List<Cliente> clientes = clienteSpringDBMongoRepository .findAll();
+		log.info("[inicia] ClienteInfraRepository - buscaClientes");
+		return clientes;
 	}
 
 }

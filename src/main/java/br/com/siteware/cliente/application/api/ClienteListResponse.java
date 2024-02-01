@@ -1,7 +1,8 @@
 package br.com.siteware.cliente.application.api;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.cliente.domain.enuns.Sexo;
@@ -13,23 +14,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
-public class ClienteDetalhadoResponse {
+public class ClienteListResponse {
 	private UUID idCliente;
 	private String nome;
 	private String email;
-	private String telefone;
 	private Sexo sexo;
-	private LocalDate dataNascimento;
-	
-	private ClienteDetalhadoResponse(Cliente cliente) {
+
+	public ClienteListResponse(Cliente cliente) {
 		this.idCliente = cliente.getIdCliente();
 		this.nome = cliente.getNome();
 		this.email = cliente.getEmail();
 		this.sexo = cliente.getSexo();
-		this.dataNascimento = cliente.getDataNascimento();
 	}
 	
-	public static ClienteDetalhadoResponse converteClienteParaResponse(Cliente cliente) {
-		return new ClienteDetalhadoResponse(cliente);
+	public static List<ClienteListResponse> converte(List<Cliente> clientes){
+		return clientes.stream().map(ClienteListResponse::new).collect(Collectors.toList());
 	}
 }

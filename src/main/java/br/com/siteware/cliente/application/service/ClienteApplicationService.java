@@ -1,5 +1,6 @@
 package br.com.siteware.cliente.application.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.siteware.cliente.application.api.ClienteDetalhadoResponse;
 import br.com.siteware.cliente.application.api.ClienteIdResponse;
+import br.com.siteware.cliente.application.api.ClienteListResponse;
 import br.com.siteware.cliente.application.api.ClienteNovoRequest;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
@@ -58,6 +60,15 @@ public class ClienteApplicationService implements ClienteService {
 		var cliente = clienteRepository.detalhaClientePorEmail(emailCliente);
 		log.info("[finaliza] ClienteApplicationService - buscaClientePorId");
 		return cliente;
+	}
+
+	@Override
+	public List<ClienteListResponse> buscaTodosOsClientes(String email) {
+		log.info("[inicia] ClienteApplicationService - buscaTodosOsClientes");
+		clienteRepository.detalhaClientePorEmail(email);
+		List<Cliente> clientes = clienteRepository.buscaClientes();		
+		log.info("[finaliza] ClienteApplicationService - buscaTodosOsClientes");
+		return ClienteListResponse.converte(clientes);
 	}
 
 }

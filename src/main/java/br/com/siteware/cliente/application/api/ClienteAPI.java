@@ -1,5 +1,6 @@
 package br.com.siteware.cliente.application.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -25,5 +26,9 @@ public interface ClienteAPI {
 	@GetMapping(value = "/{idCliente}/busca-cliente")
 	@ResponseStatus(value = HttpStatus.OK)
 	ClienteDetalhadoResponse buscaClientePorId(@PathParam(value = "email") String email, @PathVariable(value = "idCliente") UUID idCliente);
+
+	@GetMapping(value = "/busca-clientes")
+	@ResponseStatus(value = HttpStatus.OK)
+	List<ClienteListResponse> buscaTodosOsClientes(@PathParam(value = "email") String email);
 
 }
