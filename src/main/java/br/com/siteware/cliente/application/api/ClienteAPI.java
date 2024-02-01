@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/public/v1/cliente")
@@ -23,6 +24,6 @@ public interface ClienteAPI {
 
 	@GetMapping(value = "/{idCliente}/busca-cliente")
 	@ResponseStatus(value = HttpStatus.OK)
-	ClienteDetalhadoResponse buscaClientePorId(@PathVariable(value = "idCliente") UUID idCliente);
+	ClienteDetalhadoResponse buscaClientePorId(@PathParam(value = "email") String email, @PathVariable(value = "idCliente") UUID idCliente);
 
 }

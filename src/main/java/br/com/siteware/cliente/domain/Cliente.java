@@ -2,6 +2,7 @@ package br.com.siteware.cliente.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -56,6 +57,12 @@ public class Cliente {
 	private Sexo retornaSexo(String sexo) {
 		return Sexo.validaSexo(sexo)
 	            .orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Valor inválido, digite novamente."));
+	}
+
+	public void pertenceAoCliente(Cliente emailCliente) {
+		if (!idCliente.equals(emailCliente.getIdCliente())) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Cliente não autorizado.");
+		}
 	}
 
 }

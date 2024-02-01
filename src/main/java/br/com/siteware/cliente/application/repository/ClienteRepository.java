@@ -11,4 +11,6 @@ public interface ClienteRepository {
 
 	Optional<Cliente> detalhaClientePorId(UUID idCliente);
 
+	Cliente detalhaClientePorEmail(String emailCliente);
+
 }

@@ -23,10 +23,10 @@ public class ClienteRestController implements ClienteAPI {
 	}
 
 	@Override
-	public ClienteDetalhadoResponse buscaClientePorId(UUID idCliente) {
+	public ClienteDetalhadoResponse buscaClientePorId(String email, UUID idCliente) {
 		log.info("[inicia] ClienteController - buscaClientePorId");
 		log.info("[idCliente] {}", idCliente);
-		ClienteDetalhadoResponse clienteDetalhado = clienteService.buscaClientePorId(idCliente);		
+		ClienteDetalhadoResponse clienteDetalhado = clienteService.buscaClientePorId(email, idCliente);		
 		log.info("[finaliza] ClienteController - buscaClientePorId");		
 		return clienteDetalhado;
 	}

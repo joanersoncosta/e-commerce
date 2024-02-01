@@ -29,15 +29,16 @@ public class ClienteApplicationService implements ClienteService {
 	}
 
 	@Override
-	public ClienteDetalhadoResponse buscaClientePorId(UUID idCliente) {
+	public ClienteDetalhadoResponse buscaClientePorId(String email, UUID idCliente) {
 		log.info("[inicia] ClienteApplicationService - buscaClientePorId");
+		Cliente emailCliente = clienteRepository.detalhaClientePorEmail(email);
+		log.info("[emailCliente] {}", emailCliente);
 		log.info("[idCliente] {}", idCliente);
-		var clienteResponse = clienteRepository.detalhaClientePorId(idCliente)
-				.map(ClienteDetalhadoResponse::converteClienteParaResponse)
+		Cliente cliente = clienteRepository.detalhaClientePorId(idCliente)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
+		cliente.pertenceAoCliente(emailCliente);
 		log.info("[finaliza] ClienteApplicationService - buscaClientePorId");
-		return clienteResponse;
-
+		return ClienteDetalhadoResponse.converteClienteParaResponse(cliente);
 	}
 
 	@Override
@@ -46,6 +47,15 @@ public class ClienteApplicationService implements ClienteService {
 		log.info("[idCliente] {}", idCliente);
 		var cliente = clienteRepository.detalhaClientePorId(idCliente)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
+		log.info("[finaliza] ClienteApplicationService - buscaClientePorId");
+		return cliente;
+	}
+
+	@Override
+	public Cliente detalhaClientePorEmail(String emailCliente) {
+		log.info("[inicia] ClienteApplicationService - buscaClientePorId");
+		log.info("[emailCliente] {}", emailCliente);
+		var cliente = clienteRepository.detalhaClientePorEmail(emailCliente);
 		log.info("[finaliza] ClienteApplicationService - buscaClientePorId");
 		return cliente;
 	}

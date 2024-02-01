@@ -11,8 +11,10 @@ public interface ClienteService {
 
 	ClienteIdResponse criaNovoCliente(ClienteNovoRequest clienteRequest);
 
-	ClienteDetalhadoResponse buscaClientePorId(UUID idCliente);
+	ClienteDetalhadoResponse buscaClientePorId(String email, UUID idCliente);
 
 	Cliente detalhaClientePorId(UUID idCliente);
+	
+	Cliente detalhaClientePorEmail(String emailCliente);
 
 }
