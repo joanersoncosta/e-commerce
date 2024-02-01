@@ -1,5 +1,7 @@
 package br.com.siteware.cliente.application.api;
 
+import java.util.UUID;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.siteware.cliente.application.service.ClienteService;
@@ -20,4 +22,12 @@ public class ClienteRestController implements ClienteAPI {
 		return idCliente;
 	}
 
+	@Override
+	public ClienteDetalhadoResponse buscaClientePorId(UUID idCliente) {
+		log.info("[inicia] ClienteController - buscaClientePorId");
+		log.info("[idCliente] {}", idCliente);
+		ClienteDetalhadoResponse clienteDetalhado = clienteService.buscaClientePorId(idCliente);		
+		log.info("[finaliza] ClienteController - buscaClientePorId");		
+		return clienteDetalhado;
+	}
 }
