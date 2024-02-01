@@ -13,7 +13,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/public/v1/cliente")
 public interface ClienteAPI {
 
-	@PostMapping
+	@PostMapping(path = "/login")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	ClienteIdResponse criaNovoCliente(@RequestBody @Valid ClienteNovoRequest clienteRequest);
 

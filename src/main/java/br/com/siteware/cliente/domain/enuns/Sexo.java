@@ -16,7 +16,7 @@ public enum Sexo {
 		return this.sexo;
 	}
 	
-	public static Optional<Sexo> validaSexo(Sexo sexo) {
+	public static Optional<Sexo> validaSexo(String sexo) {
 		return Arrays.stream(values()).filter(valorCorrespondente -> valorCorrespondente.getSexo().equals(sexo))
 				.findFirst();
 	}

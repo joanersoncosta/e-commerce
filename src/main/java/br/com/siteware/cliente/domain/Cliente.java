@@ -7,9 +7,11 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.HttpStatus;
 
 import br.com.siteware.cliente.application.api.ClienteNovoRequest;
 import br.com.siteware.cliente.domain.enuns.Sexo;
+import br.com.siteware.handler.APIException;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,9 +48,14 @@ public class Cliente {
 		this.idCliente = UUID.randomUUID();
 		this.nome = clienteRequest.getNome();
 		this.email = clienteRequest.getEmail();
-		this.sexo = clienteRequest.getSexo();
+		this.sexo = retornaSexo(clienteRequest.getSexo());
 		this.dataNascimento = LocalDate.parse(clienteRequest.getDataNascimento());
 		this.momentoDoDacastro = LocalDateTime.now();
+	}
+
+	private Sexo retornaSexo(String sexo) {
+		return Sexo.validaSexo(sexo)
+	            .orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Valor inválido, digite novamente."));
 	}
 
 }

@@ -2,7 +2,6 @@ package br.com.siteware.cliente.application.api;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 
-import br.com.siteware.cliente.domain.enuns.Sexo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +26,7 @@ public class ClienteNovoRequest {
 	@Size(min = 6, max = 10, message = "Digite novamente a senha.")
 	private String senha;
 	@NotNull(message = "Digite novamente o sexo.")
-	private Sexo sexo;
+	private String sexo;
 	@NotNull(message = "Digite novamente a data de nascimento.")
 	private String dataNascimento;
 
