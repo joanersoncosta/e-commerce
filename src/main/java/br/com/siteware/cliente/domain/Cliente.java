@@ -2,7 +2,6 @@ package br.com.siteware.cliente.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
