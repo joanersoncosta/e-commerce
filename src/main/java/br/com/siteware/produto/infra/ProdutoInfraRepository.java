@@ -1,5 +1,8 @@
 package br.com.siteware.produto.infra;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -25,6 +28,14 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 			throw APIException.build(HttpStatus.BAD_REQUEST, "Produto já cadastrado.");
 		}
 		log.info("[finish] ProdutoInfraRepository - salva");
+		return produto;
+	}
+
+	@Override
+	public Optional<Produto> detalhaProdutoPorId(UUID idProduto) {
+		log.info("[inicia] ProdutoInfraRepository - detalhaProdutoPorId");
+		Optional<Produto> produto = produtoSpringMongoDbRepository.findById(idProduto);
+		log.info("[finaliza] ProdutoInfraRepository - detalhaProdutoPorId");
 		return produto;
 	}
 
