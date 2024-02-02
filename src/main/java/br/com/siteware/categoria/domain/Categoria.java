@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Categoria {
-	ELETRONICO("ELETRONICO"), IMOVEL("IMOVEL"), COSMETICO("COSMETICO"), PET("PET");
+	ELETRONICO("ELETRONICO"), IMOVEL("IMOVEL"), COSMETICO("COSMETICO"), PET("PET"), PAPELARIA("PAPELARIA");
 	
 	private String categoria;
 	
