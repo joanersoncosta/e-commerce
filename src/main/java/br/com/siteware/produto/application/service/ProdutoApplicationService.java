@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
@@ -49,6 +50,16 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[inicia] ProdutoRestController - buscaTodosProdutos");
 		List<Produto> produtos = produtoRepository.buscaTodosProdutos();
 		log.info("[finaliza] ProdutoRestController - buscaTodosProdutos");
+		return ProdutoListResponse.converte(produtos);
+	}
+
+	@Override
+	public List<ProdutoListResponse> buscaProdutosPorCategoria(String categoria) {
+		log.info("[inicia] ProdutoRestController - buscaProdutosPorCategoria");
+		Categoria categoriaVarida = Categoria.validaCategoria(categoria.toUpperCase())
+				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Nenhum Produto encontrado para esta categoria."));
+		List<Produto> produtos = produtoRepository.buscaProdutosPorCategoria(categoriaVarida);
+		log.info("[finaliza] ProdutoRestController - buscaProdutosPorCategoria");
 		return ProdutoListResponse.converte(produtos);
 	}
 

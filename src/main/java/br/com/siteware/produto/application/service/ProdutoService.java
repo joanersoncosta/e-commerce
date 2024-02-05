@@ -16,4 +16,6 @@ public interface ProdutoService {
 
 	List<ProdutoListResponse> buscaTodosProdutos();
 
+	List<ProdutoListResponse> buscaProdutosPorCategoria(String categoria);
+
 }

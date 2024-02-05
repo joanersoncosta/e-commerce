@@ -31,4 +31,7 @@ public interface ProdutoAPI {
 	@ResponseStatus(value = HttpStatus.OK)
 	List<ProdutoListResponse> buscaTodosProdutos();
 
+	@GetMapping(path = "/busca-produtos-por-categoria")
+	@ResponseStatus(value = HttpStatus.OK)
+	List<ProdutoListResponse> buscaProdutosPorCategoria(@PathParam(value = "categoria") String categoria);
 }

@@ -40,4 +40,12 @@ public class ProdutoRestController implements ProdutoAPI {
 		return produtoListResponse;
 	}
 
+	@Override
+	public List<ProdutoListResponse> buscaProdutosPorCategoria(String categoria) {
+		log.info("[inicia] ProdutoRestController - buscaProdutosPorCategoria");
+		List<ProdutoListResponse> produtoListResponse = produtoService.buscaProdutosPorCategoria(categoria);
+		log.info("[finaliza] ProdutoRestController - buscaProdutosPorCategoria");
+		return produtoListResponse;
+	}
+
 }

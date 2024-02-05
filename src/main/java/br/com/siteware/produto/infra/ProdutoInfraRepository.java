@@ -5,9 +5,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
@@ -19,7 +23,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ProdutoInfraRepository implements ProdutoRepository {
 	private final ProdutoSpringMongoDbRepository produtoSpringMongoDbRepository;
-
+	private final MongoTemplate mongoTemplate;
+	
 	@Override
 	public Produto salva(Produto produto) {
 		log.info("[start] ProdutoInfraRepository - salva");
@@ -44,6 +49,16 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 	public List<Produto> buscaTodosProdutos() {
 		log.info("[start] ProdutoInfraRepository - buscaTodosProdutos");
 		List<Produto> produtos = produtoSpringMongoDbRepository.findAll();
+		log.info("[finish] ProdutoInfraRepository - buscaTodosProdutos");
+		return produtos;
+	}
+
+	@Override
+	public List<Produto> buscaProdutosPorCategoria(Categoria categoriaVarida) {
+		log.info("[start] ProdutoInfraRepository - buscaTodosProdutos");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("categoria").is(categoriaVarida));
+		List<Produto> produtos = mongoTemplate.find(query, Produto.class);
 		log.info("[finish] ProdutoInfraRepository - buscaTodosProdutos");
 		return produtos;
 	}
