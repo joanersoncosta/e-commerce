@@ -1,5 +1,6 @@
 package br.com.siteware.produto.application.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
+import br.com.siteware.produto.application.api.ProdutoListResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
@@ -40,6 +42,14 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[finaliza] ProdutoRestController - buscaProdutoPorId");
 		return produtoResponse;
 
+	}
+
+	@Override
+	public List<ProdutoListResponse> buscaTodosProdutos() {
+		log.info("[inicia] ProdutoRestController - buscaTodosProdutos");
+		List<Produto> produtos = produtoRepository.buscaTodosProdutos();
+		log.info("[finaliza] ProdutoRestController - buscaTodosProdutos");
+		return ProdutoListResponse.converte(produtos);
 	}
 
 }

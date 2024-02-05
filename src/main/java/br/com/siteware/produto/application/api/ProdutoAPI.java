@@ -1,5 +1,6 @@
 package br.com.siteware.produto.application.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -25,5 +26,9 @@ public interface ProdutoAPI {
 	@GetMapping(path = "/{idProduto}/busca")
 	@ResponseStatus(value = HttpStatus.OK)
 	ProdutoDetalhadoResponse buscaProdutoPorId(@PathVariable(value = "idProduto") UUID idProduto);
+
+	@GetMapping(path = "/busca-produtos")
+	@ResponseStatus(value = HttpStatus.OK)
+	List<ProdutoListResponse> buscaTodosProdutos();
 
 }
