@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +30,14 @@ public interface ProdutoAPI {
 
 	@GetMapping(path = "/busca-produtos")
 	@ResponseStatus(value = HttpStatus.OK)
-	List<ProdutoListResponse> buscaTodosProdutos();
+	List<ProdutoListResponse> buscaTodosOsProdutos();
 
 	@GetMapping(path = "/busca-produtos-por-categoria")
 	@ResponseStatus(value = HttpStatus.OK)
 	List<ProdutoListResponse> buscaProdutosPorCategoria(@PathParam(value = "categoria") String categoria);
+
+	@GetMapping(path = "/busca-produtos-por-nome")
+	@ResponseStatus(value = HttpStatus.OK)
+	List<ProdutoListResponse> buscaProdutosPorNome(@RequestParam(name = "nome") String nomeProduto);
+
 }

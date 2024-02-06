@@ -46,7 +46,7 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 	}
 
 	@Override
-	public List<Produto> buscaTodosProdutos() {
+	public List<Produto> buscaTodosOsProdutos() {
 		log.info("[start] ProdutoInfraRepository - buscaTodosProdutos");
 		List<Produto> produtos = produtoSpringMongoDbRepository.findAll();
 		log.info("[finish] ProdutoInfraRepository - buscaTodosProdutos");

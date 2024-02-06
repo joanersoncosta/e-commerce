@@ -33,10 +33,10 @@ public class ProdutoRestController implements ProdutoAPI {
 	}
 
 	@Override
-	public List<ProdutoListResponse> buscaTodosProdutos() {
-		log.info("[inicia] ProdutoRestController - buscaTodosProdutos");
-		List<ProdutoListResponse> produtoListResponse = produtoService.buscaTodosProdutos();
-		log.info("[finaliza] ProdutoRestController - buscaTodosProdutos");
+	public List<ProdutoListResponse> buscaTodosOsProdutos() {
+		log.info("[inicia] ProdutoRestController - buscaTodosOsProdutos");
+		List<ProdutoListResponse> produtoListResponse = produtoService.buscaTodosOsProdutos();
+		log.info("[finaliza] ProdutoRestController - buscaTodosOsProdutos");
 		return produtoListResponse;
 	}
 
@@ -45,6 +45,14 @@ public class ProdutoRestController implements ProdutoAPI {
 		log.info("[inicia] ProdutoRestController - buscaProdutosPorCategoria");
 		List<ProdutoListResponse> produtoListResponse = produtoService.buscaProdutosPorCategoria(categoria);
 		log.info("[finaliza] ProdutoRestController - buscaProdutosPorCategoria");
+		return produtoListResponse;
+	}
+
+	@Override
+	public List<ProdutoListResponse> buscaProdutosPorNome(String nomeProduto) {
+		log.info("[inicia] ProdutoRestController - buscaProdutosPorNome");
+		List<ProdutoListResponse> produtoListResponse = produtoService.buscaProdutosPorNome(nomeProduto);
+		log.info("[finaliza] ProdutoRestController - buscaProdutosPorNome");
 		return produtoListResponse;
 	}
 

@@ -30,6 +30,13 @@ public class ProdutoListResponse {
 	}
 
 	public static List<ProdutoListResponse> converte(List<Produto> produto) {
-		return produto.stream().map(ProdutoListResponse::new).collect(Collectors.toList());
+		return produto.stream()
+				.map(ProdutoListResponse::new).collect(Collectors.toList());
+	}
+	
+	public static List<ProdutoListResponse> converte(List<Produto> produto, String nome) {
+		return produto.stream()
+                .filter(n -> n.getNome().toLowerCase().contains(nome.toLowerCase()))				
+				.map(ProdutoListResponse::new).collect(Collectors.toList());
 	}
 }

@@ -13,8 +13,8 @@ public interface ProdutoRepository {
 
 	Optional<Produto> detalhaProdutoPorId(UUID idProduto);
 
-	List<Produto> buscaTodosProdutos();
+	List<Produto> buscaTodosOsProdutos();
 
-	List<Produto> buscaProdutosPorCategoria(Categoria categoriaVarida);
+	List<Produto> buscaProdutosPorCategoria(Categoria categoriaValida);
 
 }

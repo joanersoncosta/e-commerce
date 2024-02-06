@@ -46,9 +46,9 @@ public class ProdutoApplicationService implements ProdutoService {
 	}
 
 	@Override
-	public List<ProdutoListResponse> buscaTodosProdutos() {
+	public List<ProdutoListResponse> buscaTodosOsProdutos() {
 		log.info("[inicia] ProdutoRestController - buscaTodosProdutos");
-		List<Produto> produtos = produtoRepository.buscaTodosProdutos();
+		List<Produto> produtos = produtoRepository.buscaTodosOsProdutos();
 		log.info("[finaliza] ProdutoRestController - buscaTodosProdutos");
 		return ProdutoListResponse.converte(produtos);
 	}
@@ -56,11 +56,19 @@ public class ProdutoApplicationService implements ProdutoService {
 	@Override
 	public List<ProdutoListResponse> buscaProdutosPorCategoria(String categoria) {
 		log.info("[inicia] ProdutoRestController - buscaProdutosPorCategoria");
-		Categoria categoriaVarida = Categoria.validaCategoria(categoria.toUpperCase())
+		Categoria categoriaValida = Categoria.validaCategoria(categoria.toUpperCase())
 				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Nenhum Produto encontrado para esta categoria."));
-		List<Produto> produtos = produtoRepository.buscaProdutosPorCategoria(categoriaVarida);
+		List<Produto> produtos = produtoRepository.buscaProdutosPorCategoria(categoriaValida);
 		log.info("[finaliza] ProdutoRestController - buscaProdutosPorCategoria");
 		return ProdutoListResponse.converte(produtos);
+	}
+
+	@Override
+	public List<ProdutoListResponse> buscaProdutosPorNome(String nomeProduto) {
+		log.info("[inicia] ProdutoRestController - buscaProdutosPorNome");
+		List<Produto> produtos = produtoRepository.buscaTodosOsProdutos();
+		log.info("[finaliza] ProdutoRestController - buscaProdutosPorNome");
+		return ProdutoListResponse.converte(produtos, nomeProduto);
 	}
 
 }

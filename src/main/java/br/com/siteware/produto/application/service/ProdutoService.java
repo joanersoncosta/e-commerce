@@ -6,6 +6,7 @@ import java.util.UUID;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoListResponse;
+import br.com.siteware.produto.application.api.ProdutoNomeRequest;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 
 public interface ProdutoService {
@@ -14,8 +15,10 @@ public interface ProdutoService {
 
 	ProdutoDetalhadoResponse buscaProdutoPorId(UUID idProduto);
 
-	List<ProdutoListResponse> buscaTodosProdutos();
+	List<ProdutoListResponse> buscaTodosOsProdutos();
 
 	List<ProdutoListResponse> buscaProdutosPorCategoria(String categoria);
+
+	List<ProdutoListResponse> buscaProdutosPorNome(String nomeProduto);
 
 }
