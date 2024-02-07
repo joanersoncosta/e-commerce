@@ -6,10 +6,12 @@ import java.util.UUID;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
+import br.com.siteware.handler.APIException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -34,6 +36,15 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("idCliente").is(idCliente));
 		List<Carrinho> carrinho = mongoTemplate.find(query, Carrinho.class);
+		log.info("[finish] CarrinhoInfraRepository - salva");
+		return carrinho;
+	}
+
+	@Override
+	public Carrinho buscaCarrinhoPorId(UUID idCarrinho) {
+		log.info("[start] CarrinhoInfraRepository - salva");
+		Carrinho carrinho  = carrinhoSpringMongoDbRepository.findById(idCarrinho)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Carrinho não encontrado."));
 		log.info("[finish] CarrinhoInfraRepository - salva");
 		return carrinho;
 	}

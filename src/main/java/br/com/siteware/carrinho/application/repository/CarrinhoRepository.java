@@ -11,4 +11,6 @@ public interface CarrinhoRepository {
 
 	List<Carrinho> listaCarrinhoDoCliente(UUID idCliente);
 
+	Carrinho buscaCarrinhoPorId(UUID idCarrinho);
+
 }

@@ -1,6 +1,7 @@
 package br.com.siteware.carrinho.application.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,14 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		List<Carrinho > carrinhoDoCliente = carrinhoRepository.listaCarrinhoDoCliente(cliente.getIdCliente());
 		log.info("[finaliza] CarrinhoApplicationService - listaCarrinhoDoCliente");
 		return CarrinhoListResponse.converte(carrinhoDoCliente);
+	}
+
+	public Carrinho detalhaCarrinho(UUID idCarrinho) {
+		log.info("[inicia] CarrinhoApplicationService - detalhaCarrinho");
+		log.info("[idCarrinho] {}", idCarrinho);
+		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
+		log.info("[finaliza] CarrinhoApplicationService - detalhaCarrinho");
+		return carrinho;
 	}
 
 }
