@@ -56,6 +56,6 @@ public interface ProdutoAPI {
 
 	@GetMapping(path = "/busca-produtos-promocao")
 	@ResponseStatus(value = HttpStatus.OK)
-	List<ProdutoListResponse> buscaProdutoComPromocao(@RequestParam(name = "email", required = true) String email);
+	List<ProdutoListResponse> buscaProdutoComPromocao();
 
 }

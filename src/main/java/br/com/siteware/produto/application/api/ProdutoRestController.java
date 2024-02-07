@@ -81,9 +81,9 @@ public class ProdutoRestController implements ProdutoAPI {
 	}
 
 	@Override
-	public List<ProdutoListResponse> buscaProdutoComPromocao(String email) {
+	public List<ProdutoListResponse> buscaProdutoComPromocao() {
 		log.info("[inicia] ProdutoRestController - buscaProdutoComPromocao");
-		List<ProdutoListResponse> produtoListResponse = produtoService.buscaProdutoComPromocao(email);
+		List<ProdutoListResponse> produtoListResponse = produtoService.buscaProdutoComPromocao();
 		log.info("[finaliza] ProdutoRestController - buscaProdutoComPromocao");
 		return produtoListResponse;
 	}

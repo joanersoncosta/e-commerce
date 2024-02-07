@@ -28,6 +28,6 @@ public interface ProdutoService {
 
 	void alteraPromocaoDoProdutoPorId(String email, UUID idProduto, AlteraPromocaoProdutoRequest editaPromocaoProduto);
 
-	List<ProdutoListResponse> buscaProdutoComPromocao(String email);
+	List<ProdutoListResponse> buscaProdutoComPromocao();
 
 }
