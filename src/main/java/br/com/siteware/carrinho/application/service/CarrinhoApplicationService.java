@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.siteware.carrinho.application.api.CarrinhoIdResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoListResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoRequest;
+import br.com.siteware.carrinho.application.api.EditaCarrinhoRequest;
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
@@ -59,14 +60,27 @@ public class CarrinhoApplicationService implements CarrinhoService {
 
 	@Override
 	public void removeCarrinho(String email, UUID idCarrinho) {
-		log.info("[inicia] CarrinhoApplicationService - detalhaCarrinho");
+		log.info("[inicia] CarrinhoApplicationService - removeCarrinho");
 		Cliente clienteEmail = clienteRepository.detalhaClientePorEmail(email);
 		log.info("[clienteEmail] {}", clienteEmail);
 		log.info("[idCarrinho] {}", idCarrinho);
 		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
 		carrinho.pertenceCliente(clienteEmail);
 		carrinhoRepository.removeCarrinho(carrinho);
-		log.info("[finaliza] CarrinhoApplicationService - detalhaCarrinho");
+		log.info("[finaliza] CarrinhoApplicationService - removeCarrinho");
+	}
+
+	@Override
+	public void editaCarrinho(String email, UUID idCarrinho, EditaCarrinhoRequest carrinhoRequest) {
+		log.info("[inicia] CarrinhoApplicationService - editaCarrinho");
+		Cliente clienteEmail = clienteRepository.detalhaClientePorEmail(email);
+		log.info("[clienteEmail] {}", clienteEmail);
+		log.info("[idCarrinho] {}", idCarrinho);
+		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
+		carrinho.pertenceCliente(clienteEmail);
+		carrinho.atualizaCarrinho(carrinhoRequest);
+		carrinhoRepository.atualizaCarrinho(carrinho);
+		log.info("[finaliza] CarrinhoApplicationService - editaCarrinho");
 	}
 
 }

@@ -15,4 +15,6 @@ public interface CarrinhoRepository {
 
 	void removeCarrinho(Carrinho carrinho);
 
+	void atualizaCarrinho(Carrinho carrinho);
+
 }

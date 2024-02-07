@@ -58,4 +58,11 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 		log.info("[finish] CarrinhoInfraRepository - removeCarrinho");
 	}
 
+	@Override
+	public void atualizaCarrinho(Carrinho carrinho) {
+		log.info("[start] CarrinhoInfraRepository - removeCarrinho");
+		carrinhoSpringMongoDbRepository.save(carrinho);
+		log.info("[finish] CarrinhoInfraRepository - removeCarrinho");
+	}
+
 }

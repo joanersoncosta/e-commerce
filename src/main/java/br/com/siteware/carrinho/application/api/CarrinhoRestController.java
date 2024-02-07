@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.siteware.carrinho.application.service.CarrinhoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -36,6 +37,13 @@ public class CarrinhoRestController implements CarrinhoAPI {
 		log.info("[inicia] CarrinhoRestController - removeCarrinho");
 		carrinhoService.removeCarrinho(email, idCarrinho);
 		log.info("[finaliza] CarrinhoRestController - removeCarrinho");
+	}
+
+	@Override
+	public void editaCarrinho(String email, UUID idCarrinho, EditaCarrinhoRequest carrinhoRequest) {
+		log.info("[inicia] CarrinhoRestController - editaCarrinho");
+		carrinhoService.editaCarrinho(email, idCarrinho, carrinhoRequest);
+		log.info("[finaliza] CarrinhoRestController - editaCarrinho");
 	}
 
 }

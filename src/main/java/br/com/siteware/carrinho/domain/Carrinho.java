@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
 
+import br.com.siteware.carrinho.application.api.EditaCarrinhoRequest;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.domain.Produto;
@@ -48,10 +49,10 @@ public class Carrinho {
 		this.descricao = produto.getDescricao();
 		this.preco = produto.getPreco();
 		this.quantidade = quantidade;
-		this.subTotal = getSubTotal(promocao, quantidade);
+		this.subTotal = subTotal(promocao, quantidade);
 	}
 
-	private Double getSubTotal(PromocaoProduto promocao, Integer quantidade) {
+	private Double subTotal(PromocaoProduto promocao, Integer quantidade) {
 		return promocao == PromocaoProduto.LEVE_2_PAGUE_1 && quantidade == 2 ? this.subTotal = this.preco * (quantidade - 1)
 				: promocao == PromocaoProduto.LEVE_3_PAGUE_10_REAIS && quantidade == 3 ? this.subTotal = 10.00
 				: this.preco * quantidade;
@@ -61,6 +62,12 @@ public class Carrinho {
 		if (!this.idCliente.equals(clienteEmail.getIdCliente())) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Cliente não autorizado.");
 		}
+	}
+
+	public void atualizaCarrinho(EditaCarrinhoRequest carrinhoRequest) {
+		this.quantidade = carrinhoRequest.getQuantidade();
+		Double soma = subTotal(promocao, quantidade);
+		this.subTotal = soma;
 	}
 	
 }
