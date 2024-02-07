@@ -21,4 +21,6 @@ public interface ProdutoService {
 
 	List<ProdutoListResponse> buscaProdutosPorNome(String nomeProduto);
 
+	void deletaProdutoPorId(UUID idProduto);
+
 }

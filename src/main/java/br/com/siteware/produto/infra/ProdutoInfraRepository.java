@@ -63,4 +63,11 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		return produtos;
 	}
 
+	@Override
+	public void deletaProduto(Produto produto) {
+		log.info("[start] ProdutoInfraRepository - deletaProduto");
+		produtoSpringMongoDbRepository.delete(produto);
+		log.info("[finish] ProdutoInfraRepository - deletaProduto");
+	}
+
 }

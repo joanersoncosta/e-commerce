@@ -56,4 +56,11 @@ public class ProdutoRestController implements ProdutoAPI {
 		return produtoListResponse;
 	}
 
+	@Override
+	public void deletaProdutoPorId(UUID idProduto) {
+		log.info("[inicia] ProdutoRestController - deletaProdutoPorId");
+		produtoService.deletaProdutoPorId(idProduto);
+		log.info("[finaliza] ProdutoRestController - deletaProdutoPorId");
+	}
+
 }

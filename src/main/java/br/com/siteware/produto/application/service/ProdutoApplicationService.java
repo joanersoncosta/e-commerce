@@ -28,6 +28,7 @@ public class ProdutoApplicationService implements ProdutoService {
 	@Override
 	public ProdutoIdResponse cadastraProduto(String email, ProdutoRequest produtoRequest) {
 		log.info("[inicia] ProdutoApplicationService - cadastraProduto");
+		log.info("[email] {}", email);
 		clienteRepository.detalhaClientePorEmail(email);
 		Produto produto = produtoRepository.salva(new Produto(produtoRequest));
 		log.info("[finaliza] ProdutoApplicationService - cadastraProduto");
@@ -37,9 +38,10 @@ public class ProdutoApplicationService implements ProdutoService {
 	@Override
 	public ProdutoDetalhadoResponse buscaProdutoPorId(UUID idProduto) {
 		log.info("[inicia] ProdutoRestController - buscaProdutoPorId");
+		log.info("[idProduto] {}", idProduto);
 		var produtoResponse = produtoRepository.detalhaProdutoPorId(idProduto)
 				.map(ProdutoDetalhadoResponse::converte)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado!"));
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		log.info("[finaliza] ProdutoRestController - buscaProdutoPorId");
 		return produtoResponse;
 
@@ -69,6 +71,16 @@ public class ProdutoApplicationService implements ProdutoService {
 		List<Produto> produtos = produtoRepository.buscaTodosOsProdutos();
 		log.info("[finaliza] ProdutoRestController - buscaProdutosPorNome");
 		return ProdutoListResponse.converte(produtos, nomeProduto);
+	}
+
+	@Override
+	public void deletaProdutoPorId(UUID idProduto) {
+		log.info("[inicia] ProdutoRestController - buscaProdutoPorId");
+		log.info("[idProduto] {}", idProduto);
+		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produtoRepository.deletaProduto(produto);
+		log.info("[finaliza] ProdutoRestController - buscaProdutoPorId");
 	}
 
 }

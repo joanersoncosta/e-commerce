@@ -1,6 +1,7 @@
 package br.com.siteware.produto.application.api;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import br.com.siteware.categoria.domain.Categoria;
@@ -15,6 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class ProdutoListResponse {
+	
+	private UUID idProduto;
 	private Categoria categoria;
 	private PromocaoProduto promocao;
 	private String nome;
@@ -22,6 +25,7 @@ public class ProdutoListResponse {
 	private Double preco;
 
 	private ProdutoListResponse(Produto produto) {
+		this.idProduto = produto.getIdProduto();
 		this.categoria = produto.getCategoria();
 		this.promocao = produto.getPromocao();
 		this.nome = produto.getNome();

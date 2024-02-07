@@ -17,4 +17,6 @@ public interface ProdutoRepository {
 
 	List<Produto> buscaProdutosPorCategoria(Categoria categoriaValida);
 
+	void deletaProduto(Produto produto);
+
 }
