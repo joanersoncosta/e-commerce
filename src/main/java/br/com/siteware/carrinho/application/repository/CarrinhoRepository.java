@@ -13,4 +13,6 @@ public interface CarrinhoRepository {
 
 	Carrinho buscaCarrinhoPorId(UUID idCarrinho);
 
+	void removeCarrinho(Carrinho carrinho);
+
 }

@@ -5,7 +5,10 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.HttpStatus;
 
+import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 import jakarta.validation.constraints.NotNull;
@@ -52,6 +55,12 @@ public class Carrinho {
 		return promocao == PromocaoProduto.LEVE_2_PAGUE_1 && quantidade == 2 ? this.subTotal = this.preco * (quantidade - 1)
 				: promocao == PromocaoProduto.LEVE_3_PAGUE_10_REAIS && quantidade == 3 ? this.subTotal = 10.00
 				: this.preco * quantidade;
+	}
+
+	public void pertenceCliente(Cliente clienteEmail) {
+		if (!this.idCliente.equals(clienteEmail.getIdCliente())) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Cliente não autorizado.");
+		}
 	}
 	
 }

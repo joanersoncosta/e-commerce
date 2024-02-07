@@ -49,4 +49,13 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 		return carrinho;
 	}
 
+	@Override
+	public void removeCarrinho(Carrinho carrinho) {
+		log.info("[start] CarrinhoInfraRepository - removeCarrinho");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idCarrinho").is(carrinho.getIdCarrinho()));
+		mongoTemplate.remove(query, Carrinho.class);
+		log.info("[finish] CarrinhoInfraRepository - removeCarrinho");
+	}
+
 }

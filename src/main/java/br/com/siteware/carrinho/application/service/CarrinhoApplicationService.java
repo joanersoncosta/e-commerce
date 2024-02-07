@@ -57,4 +57,16 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		return carrinho;
 	}
 
+	@Override
+	public void removeCarrinho(String email, UUID idCarrinho) {
+		log.info("[inicia] CarrinhoApplicationService - detalhaCarrinho");
+		Cliente clienteEmail = clienteRepository.detalhaClientePorEmail(email);
+		log.info("[clienteEmail] {}", clienteEmail);
+		log.info("[idCarrinho] {}", idCarrinho);
+		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
+		carrinho.pertenceCliente(clienteEmail);
+		carrinhoRepository.removeCarrinho(carrinho);
+		log.info("[finaliza] CarrinhoApplicationService - detalhaCarrinho");
+	}
+
 }

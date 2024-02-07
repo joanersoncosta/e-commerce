@@ -1,6 +1,7 @@
 package br.com.siteware.carrinho.application.api;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,13 @@ public class CarrinhoRestController implements CarrinhoAPI {
 		List<CarrinhoListResponse> carrinhoResponse = carrinhoService.listaCarrinhoDoCliente(email);
 		log.info("[finaliza] CarrinhoRestController - listaCarrinhoDoCliente");
 		return carrinhoResponse;
+	}
+
+	@Override
+	public void removeCarrinho(String email, UUID idCarrinho) {
+		log.info("[inicia] CarrinhoRestController - removeCarrinho");
+		carrinhoService.removeCarrinho(email, idCarrinho);
+		log.info("[finaliza] CarrinhoRestController - removeCarrinho");
 	}
 
 }
