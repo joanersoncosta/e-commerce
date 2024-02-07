@@ -49,14 +49,25 @@ public class Carrinho {
 		this.descricao = produto.getDescricao();
 		this.preco = produto.getPreco();
 		this.quantidade = quantidade;
-		this.subTotal = subTotal(promocao, quantidade);
+		validaQuantidade(quantidade);
+		this.subTotal = calculaSubTotal();
 	}
 
-	private Double subTotal(PromocaoProduto promocao, Integer quantidade) {
-		return promocao == PromocaoProduto.LEVE_2_PAGUE_1 && quantidade == 2 ? this.subTotal = this.preco * (quantidade - 1)
-				: promocao == PromocaoProduto.LEVE_3_PAGUE_10_REAIS && quantidade == 3 ? this.subTotal = 10.00
-				: this.preco * quantidade;
+	private void validaQuantidade(Integer quantidade) {
+	    if (quantidade <= 0) {
+	        throw APIException.build(HttpStatus.BAD_REQUEST, "A quantidade deve ser maior que zero.");
+	    }		
 	}
+
+	private Double calculaSubTotal() {
+        if (promocao == PromocaoProduto.LEVE_2_PAGUE_1 && quantidade == 2) {
+            return preco;
+        } else if (promocao == PromocaoProduto.LEVE_3_PAGUE_10_REAIS && quantidade == 3) {
+            return 10.00;
+        } else {
+            return preco * quantidade;
+        }
+    }
 
 	public void pertenceCliente(Cliente clienteEmail) {
 		if (!this.idCliente.equals(clienteEmail.getIdCliente())) {
@@ -65,9 +76,12 @@ public class Carrinho {
 	}
 
 	public void atualizaCarrinho(EditaCarrinhoRequest carrinhoRequest) {
+		int novaQuantidade = carrinhoRequest.getQuantidade();
+	    if (novaQuantidade <= 0) {
+	        throw APIException.build(HttpStatus.BAD_REQUEST, "A quantidade deve ser maior que zero.");
+	    }
 		this.quantidade = carrinhoRequest.getQuantidade();
-		Double soma = subTotal(promocao, quantidade);
-		this.subTotal = soma;
+	    this.subTotal = calculaSubTotal();
 	}
 	
 }
