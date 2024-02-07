@@ -6,10 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,15 +26,32 @@ public class Carrinho {
 	private UUID idCarrinho;
 	@Indexed
 	private UUID idCliente;
-	@Indexed
+	@NotNull
 	private UUID idProduto;
-	@NotNull
 	private PromocaoProduto promocao;
-	@NotNull
 	private String nome;
-	@NotBlank(message = "Campo descrição produto não pode estar vazio")
-	@Size(max = 255, min = 3)
 	private String descricao;
 	private Double preco;
-	private int quantidade;
+	@NotNull
+	private Integer quantidade;
+	private Double subTotal;
+	
+	public Carrinho(UUID idCliente, Produto produto, Integer quantidade) {
+		this.idCarrinho = UUID.randomUUID();
+		this.idCliente = idCliente;
+		this.idProduto = produto.getIdProduto();
+		this.promocao = produto.getPromocao();
+		this.nome = produto.getNome();
+		this.descricao = produto.getDescricao();
+		this.preco = produto.getPreco();
+		this.quantidade = quantidade;
+		this.subTotal = getSubTotal(promocao, quantidade);
+	}
+
+	private Double getSubTotal(PromocaoProduto promocao, Integer quantidade) {
+		return promocao == PromocaoProduto.LEVE_2_PAGUE_1 && quantidade == 2 ? this.subTotal = this.preco * (quantidade - 1)
+				: promocao == PromocaoProduto.LEVE_3_PAGUE_10_REAIS && quantidade == 3 ? this.subTotal = 10.00
+				: this.preco * quantidade;
+	}
+	
 }
