@@ -54,4 +54,8 @@ public interface ProdutoAPI {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	void alteraPromocaoDoProdutoPorId(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid AlteraPromocaoProdutoRequest editaPromocaoProduto);
 
+	@GetMapping(path = "/busca-produtos-promocao")
+	@ResponseStatus(value = HttpStatus.OK)
+	List<ProdutoListResponse> buscaProdutoComPromocao(@RequestParam(name = "email", required = true) String email);
+
 }

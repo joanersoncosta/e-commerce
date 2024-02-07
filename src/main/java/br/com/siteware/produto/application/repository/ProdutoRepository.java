@@ -25,4 +25,6 @@ public interface ProdutoRepository {
 
 	void alteraPromocaoDoProduto(Produto produto, PromocaoProduto promocao);
 
+	List<Produto> buscaProdutoComPromocao();
+
 }

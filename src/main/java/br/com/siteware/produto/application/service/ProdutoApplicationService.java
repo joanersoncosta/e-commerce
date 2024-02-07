@@ -113,4 +113,14 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[finaliza] ProdutoRestController - editaProdutoPorId");
 	}
 
+	@Override
+	public List<ProdutoListResponse> buscaProdutoComPromocao(String email) {
+		log.info("[inicia] ProdutoRestController - buscaProdutoComPromocao");
+		log.info("[email] {}", email);
+		clienteRepository.detalhaClientePorEmail(email);
+		List<Produto> produtos = produtoRepository.buscaProdutoComPromocao();
+		log.info("[finaliza] ProdutoRestController - buscaProdutoComPromocao");
+		return ProdutoListResponse.converte(produtos);
+	}
+
 }

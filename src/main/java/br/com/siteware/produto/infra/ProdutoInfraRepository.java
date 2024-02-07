@@ -18,6 +18,7 @@ import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
+import br.com.siteware.produto.domain.enuns.PromocaoProdutoStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -98,8 +99,19 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		update.set("promocao", promocao);
 		update.set("statusPromocao", produto.getStatusPromocao());
 		
-		mongoTemplate.updateFirst(query, update,Produto.class);
+		mongoTemplate.updateFirst(query, update, Produto.class);
 		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");
+	}
+
+	@Override
+	public List<Produto> buscaProdutoComPromocao() {
+		log.info("[start] ProdutoInfraRepository - alteraPromocaoDoProduto");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("statusPromocao").is(PromocaoProdutoStatus.ATIVO));
+		
+		List<Produto> produtos = mongoTemplate.find(query, Produto.class);
+		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");
+		return produtos;
 	}
 
 }
