@@ -108,6 +108,7 @@ public class ProdutoApplicationService implements ProdutoService {
 
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produto.alteraStatusPromocao(promocao);
 		produtoRepository.alteraPromocaoDoProduto(produto, promocao);
 		log.info("[finaliza] ProdutoRestController - editaProdutoPorId");
 	}

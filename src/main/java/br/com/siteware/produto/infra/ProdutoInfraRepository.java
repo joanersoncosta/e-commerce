@@ -96,6 +96,7 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		
 		Update update = new Update();
 		update.set("promocao", promocao);
+		update.set("statusPromocao", produto.getStatusPromocao());
 		
 		mongoTemplate.updateFirst(query, update,Produto.class);
 		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");

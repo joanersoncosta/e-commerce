@@ -11,6 +11,7 @@ import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
+import br.com.siteware.produto.domain.enuns.PromocaoProdutoStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,6 +34,8 @@ public class Produto {
 	private Categoria categoria;
 	@NotNull
 	private PromocaoProduto promocao;
+	@NotNull
+	private PromocaoProdutoStatus statusPromocao;
 	@NotBlank
 	private String nome;
 	@NotBlank
@@ -47,10 +50,15 @@ public class Produto {
 		this.idProduto = UUID.randomUUID();
 		this.categoria = retornaCategoria(produtoRequest.getCategoria());
 		this.promocao = retornaPromocao(produtoRequest.getPromocao());
+		this.statusPromocao = statusPromocao(promocao);
 		this.nome = produtoRequest.getNome();
 		this.descricao = produtoRequest.getDescricao();
 		this.preco = produtoRequest.getPreco();
 		this.dataCadastroProduto = LocalDateTime.now();
+	}
+
+	public PromocaoProdutoStatus statusPromocao(PromocaoProduto promocao) {
+		return promocao == PromocaoProduto.NENHUM ? PromocaoProdutoStatus.INATIVO : PromocaoProdutoStatus.ATIVO;
 	}
 
 	private Categoria retornaCategoria(String categoria) {
@@ -61,6 +69,11 @@ public class Produto {
 	private PromocaoProduto retornaPromocao(Integer promocao) {
 		return PromocaoProduto.validaPromocao(promocao)
 				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Promoção inválida, digite novamente."));
+	}
+
+	public void alteraStatusPromocao(PromocaoProduto promocao) {
+		if(promocao == PromocaoProduto.NENHUM){this.statusPromocao = PromocaoProdutoStatus.INATIVO;}
+		else {this.statusPromocao = PromocaoProdutoStatus.ATIVO;}
 	}
 
 }

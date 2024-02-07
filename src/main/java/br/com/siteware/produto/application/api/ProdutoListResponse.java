@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
+import br.com.siteware.produto.domain.enuns.PromocaoProdutoStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class ProdutoListResponse {
 	private UUID idProduto;
 	private Categoria categoria;
 	private PromocaoProduto promocao;
+	private PromocaoProdutoStatus statusPromocao;
 	private String nome;
 	private String descricao;
 	private Double preco;
@@ -28,6 +30,7 @@ public class ProdutoListResponse {
 		this.idProduto = produto.getIdProduto();
 		this.categoria = produto.getCategoria();
 		this.promocao = produto.getPromocao();
+		this.statusPromocao = produto.getStatusPromocao();
 		this.nome = produto.getNome();
 		this.descricao = produto.getDescricao();
 		this.preco = produto.getPreco();

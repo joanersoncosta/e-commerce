@@ -8,7 +8,6 @@ import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoListResponse;
-import br.com.siteware.produto.application.api.ProdutoNomeRequest;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 
 public interface ProdutoService {
