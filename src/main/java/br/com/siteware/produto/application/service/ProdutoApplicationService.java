@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.handler.APIException;
+import br.com.siteware.produto.application.api.AlteraPromocaoProdutoRequest;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
@@ -16,6 +17,7 @@ import br.com.siteware.produto.application.api.ProdutoListResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
+import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -92,6 +94,21 @@ public class ProdutoApplicationService implements ProdutoService {
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produtoRepository.editaProduto(produto, editaProduto);
+		log.info("[finaliza] ProdutoRestController - editaProdutoPorId");
+	}
+
+	@Override
+	public void alteraPromocaoDoProdutoPorId(String email, UUID idProduto,
+			AlteraPromocaoProdutoRequest request) {
+		log.info("[inicia] ProdutoRestController - editaProdutoPorId");
+		log.info("[idProduto] {}", idProduto);
+		clienteRepository.detalhaClientePorEmail(email);
+		PromocaoProduto promocao = PromocaoProduto.validaPromocao(request.getPromocao())
+				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Promoção invalida."));
+
+		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produtoRepository.alteraPromocaoDoProduto(produto, promocao);
 		log.info("[finaliza] ProdutoRestController - editaProdutoPorId");
 	}
 

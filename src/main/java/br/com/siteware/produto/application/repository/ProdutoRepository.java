@@ -7,6 +7,7 @@ import java.util.UUID;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.domain.Produto;
+import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 
 public interface ProdutoRepository {
 
@@ -21,5 +22,7 @@ public interface ProdutoRepository {
 	void deletaProduto(Produto produto);
 
 	void editaProduto(Produto produto, EditaProdutoRequest request);
+
+	void alteraPromocaoDoProduto(Produto produto, PromocaoProduto promocao);
 
 }

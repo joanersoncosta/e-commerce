@@ -17,6 +17,7 @@ import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
+import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -85,6 +86,19 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		
 		mongoTemplate.updateFirst(query, update,Produto.class);
 		log.info("[finish] ProdutoInfraRepository - editaProduto");
+	}
+
+	@Override
+	public void alteraPromocaoDoProduto(Produto produto, PromocaoProduto promocao) {
+		log.info("[start] ProdutoInfraRepository - alteraPromocaoDoProduto");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
+		
+		Update update = new Update();
+		update.set("promocao", promocao);
+		
+		mongoTemplate.updateFirst(query, update,Produto.class);
+		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");
 	}
 
 }

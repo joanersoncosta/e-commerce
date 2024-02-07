@@ -3,6 +3,7 @@ package br.com.siteware.produto.application.service;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.siteware.produto.application.api.AlteraPromocaoProdutoRequest;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
@@ -25,5 +26,7 @@ public interface ProdutoService {
 	void deletaProdutoPorId(UUID idProduto);
 
 	void editaProdutoPorId(String email, UUID idProduto, EditaProdutoRequest editaProduto);
+
+	void alteraPromocaoDoProdutoPorId(String email, UUID idProduto, AlteraPromocaoProdutoRequest editaPromocaoProduto);
 
 }

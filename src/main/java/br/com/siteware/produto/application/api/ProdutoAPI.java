@@ -50,4 +50,8 @@ public interface ProdutoAPI {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	void editaProdutoPorId(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid EditaProdutoRequest editaProduto);
 
+	@PatchMapping(path = "/{idProduto}/altera-promocao")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	void alteraPromocaoDoProdutoPorId(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid AlteraPromocaoProdutoRequest editaPromocaoProduto);
+
 }
