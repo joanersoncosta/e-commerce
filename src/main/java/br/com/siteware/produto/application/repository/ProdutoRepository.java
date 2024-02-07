@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import br.com.siteware.categoria.domain.Categoria;
+import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.domain.Produto;
 
 public interface ProdutoRepository {
@@ -18,5 +19,7 @@ public interface ProdutoRepository {
 	List<Produto> buscaProdutosPorCategoria(Categoria categoriaValida);
 
 	void deletaProduto(Produto produto);
+
+	void editaProduto(Produto produto, EditaProdutoRequest request);
 
 }

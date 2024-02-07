@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.handler.APIException;
+import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoListResponse;
@@ -81,6 +82,17 @@ public class ProdutoApplicationService implements ProdutoService {
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produtoRepository.deletaProduto(produto);
 		log.info("[finaliza] ProdutoRestController - buscaProdutoPorId");
+	}
+
+	@Override
+	public void editaProdutoPorId(String email, UUID idProduto, EditaProdutoRequest editaProduto) {
+		log.info("[inicia] ProdutoRestController - editaProdutoPorId");
+		log.info("[idProduto] {}", idProduto);
+		clienteRepository.detalhaClientePorEmail(email);
+		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produtoRepository.editaProduto(produto, editaProduto);
+		log.info("[finaliza] ProdutoRestController - editaProdutoPorId");
 	}
 
 }

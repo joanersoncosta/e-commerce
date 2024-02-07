@@ -8,11 +8,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.handler.APIException;
+import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +70,21 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		log.info("[start] ProdutoInfraRepository - deletaProduto");
 		produtoSpringMongoDbRepository.delete(produto);
 		log.info("[finish] ProdutoInfraRepository - deletaProduto");
+	}
+
+	@Override
+	public void editaProduto(Produto produto, EditaProdutoRequest request) {
+		log.info("[start] ProdutoInfraRepository - editaProduto");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
+		
+		Update update = new Update();
+		update.set("nome", request.getNome())
+			.set("descricao", request.getDescricao())
+			.set("preco", request.getPreco());
+		
+		mongoTemplate.updateFirst(query, update,Produto.class);
+		log.info("[finish] ProdutoInfraRepository - editaProduto");
 	}
 
 }
