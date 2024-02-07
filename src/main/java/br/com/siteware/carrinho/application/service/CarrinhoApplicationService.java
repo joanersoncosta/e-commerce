@@ -1,9 +1,12 @@
 package br.com.siteware.carrinho.application.service;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.com.siteware.carrinho.application.api.CarrinhoIdResponse;
+import br.com.siteware.carrinho.application.api.CarrinhoListResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoRequest;
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
@@ -33,6 +36,16 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		Carrinho carrinho = carrinhoRepository.salva(new Carrinho(cliente.getIdCliente(), produto, carrinhoRequest.getQuantidade()));
 		log.info("[finaliza] CarrinhoApplicationService - adicionaProdutoAoCarrinho");
 		return CarrinhoIdResponse.builder().idCarrinho(carrinho.getIdCarrinho()).build();
+	}
+
+	@Override
+	public List<CarrinhoListResponse> listaCarrinhoDoCliente(String email) {
+		log.info("[inicia] CarrinhoApplicationService - listaCarrinhoDoCliente");
+		log.info("[email] {}", email);
+		Cliente cliente = clienteRepository.detalhaClientePorEmail(email);
+		List<Carrinho > carrinhoDoCliente = carrinhoRepository.listaCarrinhoDoCliente(cliente.getIdCliente());
+		log.info("[finaliza] CarrinhoApplicationService - listaCarrinhoDoCliente");
+		return CarrinhoListResponse.converte(carrinhoDoCliente);
 	}
 
 }
