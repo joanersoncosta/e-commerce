@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import br.com.siteware.categoria.domain.Categoria;
+import br.com.siteware.produto.domain.EstoqueProdutoStatus;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 import br.com.siteware.produto.domain.enuns.PromocaoProdutoStatus;
@@ -22,6 +23,7 @@ public class ProdutoListResponse {
 	private Categoria categoria;
 	private PromocaoProduto promocao;
 	private PromocaoProdutoStatus statusPromocao;
+	private EstoqueProdutoStatus statusEstoque;
 	private String nome;
 	private String descricao;
 	private Double preco;
@@ -31,6 +33,7 @@ public class ProdutoListResponse {
 		this.categoria = produto.getCategoria();
 		this.promocao = produto.getPromocao();
 		this.statusPromocao = produto.getStatusPromocao();
+		this.statusEstoque = produto.getStatusEstoque();
 		this.nome = produto.getNome();
 		this.descricao = produto.getDescricao();
 		this.preco = produto.getPreco();
