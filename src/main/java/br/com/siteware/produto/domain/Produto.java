@@ -36,6 +36,10 @@ public class Produto {
 	private PromocaoProduto promocao;
 	@NotNull
 	private PromocaoProdutoStatus statusPromocao;
+	@NotNull
+	private EstoqueProdutoStatus statusEstoque;
+	@NotNull
+	private Integer estoque;
 	@NotBlank
 	private String nome;
 	@NotBlank
@@ -43,6 +47,7 @@ public class Produto {
 	private String descricao;
 	@NotNull
 	private Double preco;
+	private Integer produtosVendidos;
 	private LocalDateTime dataCadastroProduto;
 	private LocalDateTime dataModificacaoProduto;
 
@@ -51,9 +56,12 @@ public class Produto {
 		this.categoria = retornaCategoria(produtoRequest.getCategoria());
 		this.promocao = retornaPromocao(produtoRequest.getPromocao());
 		this.statusPromocao = statusPromocao(promocao);
+		this.statusEstoque = EstoqueProdutoStatus.DISPONIVEL;
+		this.estoque = produtoRequest.getEstoque();
 		this.nome = produtoRequest.getNome();
 		this.descricao = produtoRequest.getDescricao();
 		this.preco = produtoRequest.getPreco();
+		this.produtosVendidos = 0;
 		this.dataCadastroProduto = LocalDateTime.now();
 	}
 
@@ -74,6 +82,14 @@ public class Produto {
 	public void alteraStatusPromocao(PromocaoProduto promocao) {
 		if(promocao == PromocaoProduto.NENHUM){this.statusPromocao = PromocaoProdutoStatus.INATIVO;}
 		else {this.statusPromocao = PromocaoProdutoStatus.ATIVO;}
+	}
+	
+	public void incrementaProdutosVendidos() {
+		this.produtosVendidos ++;
+	}
+	
+	public void reduzProdutosVendidos() {
+		this.produtosVendidos --;
 	}
 
 }

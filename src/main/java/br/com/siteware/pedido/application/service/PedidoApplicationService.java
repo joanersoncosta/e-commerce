@@ -26,7 +26,7 @@ public class PedidoApplicationService implements PedidoService {
 		log.info("[cliente] {}", cliente);
 		List<Carrinho> carrinhoDoCliente = carrinhoRepository.listaCarrinhoDoCliente(cliente.getIdCliente());
 		log.info("[finaliza] PedidoApplicationService - buscaTodosPedidosPorId");
-		return null;
+		return PedidoDetalhadoResponse.converte(cliente.getIdCliente(), carrinhoDoCliente);
 	}
 
 }

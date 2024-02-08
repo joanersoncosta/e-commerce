@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/pedido")
 public interface PedidoAPI {
 
-	@GetMapping(path = "/busca")
+	@GetMapping(path = "/detalha")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	PedidoDetalhadoResponse buscaPedido(@RequestParam(value = "email", required = true) String email);
+	PedidoDetalhadoResponse detalhaPedido(@RequestParam(value = "email", required = true) String email);
 
 }

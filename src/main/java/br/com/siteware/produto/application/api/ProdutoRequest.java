@@ -16,6 +16,8 @@ public class ProdutoRequest {
 	private String categoria;
 	@NotNull(message = "Campo Promocao não pode está vazio.")
 	private Integer promocao;
+	@NotNull(message = "Campo Estoque não pode está vazio.")
+	private Integer estoque;
 	@NotBlank(message = "Campo Nome não pode está vazio.")
 	private String nome;
 	@NotBlank(message = "Campo Descrição não pode está vazio.")

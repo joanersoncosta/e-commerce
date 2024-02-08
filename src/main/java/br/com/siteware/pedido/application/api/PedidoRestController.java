@@ -13,7 +13,7 @@ public class PedidoRestController implements PedidoAPI {
 	private final PedidoService pedidoService;
 
 	@Override
-	public PedidoDetalhadoResponse buscaPedido(String email) {
+	public PedidoDetalhadoResponse detalhaPedido(String email) {
 		log.info("[inicia] PedidoRestController - buscaPedido");
 		PedidoDetalhadoResponse pedidoResponse = pedidoService.buscaPedido(email);
 		log.info("[finaliza] PedidoRestController - buscaPedido");
