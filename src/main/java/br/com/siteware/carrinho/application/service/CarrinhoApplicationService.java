@@ -35,9 +35,17 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		Cliente cliente = clienteRepository.detalhaClientePorEmail(email);
 		Produto produto = produtoRepository.detalhaProdutoPorId(carrinhoRequest.getIdProduto())
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado!"));
-		Carrinho carrinho = carrinhoRepository.salva(new Carrinho(cliente.getIdCliente(), produto, carrinhoRequest.getQuantidade()));
-		log.info("[finaliza] CarrinhoApplicationService - adicionaProdutoAoCarrinho");
-		return CarrinhoIdResponse.builder().idCarrinho(carrinho.getIdCarrinho()).build();
+		try {
+			produto.validaEstoque(carrinhoRequest.getQuantidade());
+			produto.incrementaProdutosVendidos(carrinhoRequest.getQuantidade());
+			produto.validaStatusEstoque();
+			produtoRepository.salva(produto);
+			Carrinho carrinho = carrinhoRepository.salva(new Carrinho(cliente.getIdCliente(), produto, carrinhoRequest.getQuantidade()));
+			log.info("[finaliza] CarrinhoApplicationService - adicionaProdutoAoCarrinho");
+			return CarrinhoIdResponse.builder().idCarrinho(carrinho.getIdCarrinho()).build();
+		}catch(APIException e) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Erro ao adicionar o Produto ao carrinho.", e);
+		}
 	}
 
 	@Override
@@ -65,7 +73,10 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		log.info("[clienteEmail] {}", clienteEmail);
 		log.info("[idCarrinho] {}", idCarrinho);
 		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
+		Produto produto = produtoRepository.detalhaProdutoPorId(carrinho.getIdProduto())
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado!"));
 		carrinho.pertenceCliente(clienteEmail);
+		carrinhoRepository.atualizaProdutosVendidos(carrinho, produto);
 		carrinhoRepository.removeCarrinho(carrinho);
 		log.info("[finaliza] CarrinhoApplicationService - removeCarrinho");
 	}

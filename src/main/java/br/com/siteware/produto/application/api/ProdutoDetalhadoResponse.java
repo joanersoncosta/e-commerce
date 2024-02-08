@@ -17,6 +17,8 @@ public class ProdutoDetalhadoResponse {
 	private PromocaoProduto promocao;
 	private PromocaoProdutoStatus statusPromocao;
 	private EstoqueProdutoStatus statusEstoque;
+	private Integer estoque;
+	private Integer produtosVendidos;
 	private String nome;
 	private String descricao;
 	private Double preco;
@@ -27,6 +29,8 @@ public class ProdutoDetalhadoResponse {
 		this.promocao = produto.getPromocao();
 		this.statusEstoque = produto.getStatusEstoque();
 		this.statusPromocao = produto.getStatusPromocao();
+		this.estoque = produto.getEstoque();
+		this.produtosVendidos  = produto.getProdutosVendidos();
 		this.nome = produto.getNome();
 		this.descricao = produto.getDescricao();
 		this.preco = produto.getPreco();

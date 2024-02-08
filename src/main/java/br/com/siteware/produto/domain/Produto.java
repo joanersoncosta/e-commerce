@@ -84,12 +84,24 @@ public class Produto {
 		else {this.statusPromocao = PromocaoProdutoStatus.ATIVO;}
 	}
 	
-	public void incrementaProdutosVendidos() {
-		this.produtosVendidos ++;
+	public void incrementaProdutosVendidos(Integer quantidade) {
+		this.produtosVendidos += quantidade;
 	}
 	
-	public void reduzProdutosVendidos() {
-		this.produtosVendidos --;
+	public void reduzProdutosVendidos(Integer quantidade) {
+		this.produtosVendidos -= quantidade;
+	}
+
+	public void validaEstoque(Integer quantidade) {
+		if (this.estoque < (produtosVendidos + quantidade)) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Não possuimos esta quantidade em estoque.");
+		}
+	}
+
+	public void validaStatusEstoque() {
+		if(this.estoque.equals(produtosVendidos)) {
+			this.statusEstoque = EstoqueProdutoStatus.INDISPONIVEL;
+		}
 	}
 
 }

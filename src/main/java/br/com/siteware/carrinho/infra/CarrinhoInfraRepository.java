@@ -6,12 +6,15 @@ import java.util.UUID;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.handler.APIException;
+import br.com.siteware.produto.domain.EstoqueProdutoStatus;
+import br.com.siteware.produto.domain.Produto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -63,6 +66,20 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 		log.info("[start] CarrinhoInfraRepository - removeCarrinho");
 		carrinhoSpringMongoDbRepository.save(carrinho);
 		log.info("[finish] CarrinhoInfraRepository - removeCarrinho");
+	}
+
+	@Override
+	public void atualizaProdutosVendidos(Carrinho carrinho, Produto produto) {
+		log.info("[start] CarrinhoInfraRepository - atualizaProdutosVendidos");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
+		
+		Update update = new Update();
+		update.set("produtosVendidos", produto.getProdutosVendidos() - carrinho.getQuantidade())
+		.set("statusEstoque", EstoqueProdutoStatus.DISPONIVEL);
+		
+		mongoTemplate.updateFirst(query, update, Produto.class);
+		log.info("[finish] CarrinhoInfraRepository - atualizaProdutosVendidos");
 	}
 
 }

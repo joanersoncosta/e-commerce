@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.siteware.carrinho.domain.Carrinho;
+import br.com.siteware.produto.domain.Produto;
 
 public interface CarrinhoRepository {
 
@@ -16,5 +17,7 @@ public interface CarrinhoRepository {
 	void removeCarrinho(Carrinho carrinho);
 
 	void atualizaCarrinho(Carrinho carrinho);
+
+	void atualizaProdutosVendidos(Carrinho carrinho, Produto produto);
 
 }

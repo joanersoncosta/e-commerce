@@ -24,16 +24,20 @@ public class ProdutoListResponse {
 	private PromocaoProduto promocao;
 	private PromocaoProdutoStatus statusPromocao;
 	private EstoqueProdutoStatus statusEstoque;
+	private Integer estoque;
+	private Integer produtosVendidos;
 	private String nome;
 	private String descricao;
 	private Double preco;
-
+	
 	private ProdutoListResponse(Produto produto) {
 		this.idProduto = produto.getIdProduto();
 		this.categoria = produto.getCategoria();
 		this.promocao = produto.getPromocao();
-		this.statusPromocao = produto.getStatusPromocao();
 		this.statusEstoque = produto.getStatusEstoque();
+		this.statusPromocao = produto.getStatusPromocao();
+		this.estoque = produto.getEstoque();
+		this.produtosVendidos  = produto.getProdutosVendidos();
 		this.nome = produto.getNome();
 		this.descricao = produto.getDescricao();
 		this.preco = produto.getPreco();
