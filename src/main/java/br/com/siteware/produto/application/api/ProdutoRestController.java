@@ -88,4 +88,11 @@ public class ProdutoRestController implements ProdutoAPI {
 		return produtoListResponse;
 	}
 
+	@Override
+	public void aplicaPromocaoAoProduto(String email, UUID idProduto, PromocaoProdutoRequest promocaoRequest) {
+		log.info("[inicia] ProdutoRestController - aplicaPromocaoAoProduto");
+		produtoService.aplicaPromocaoAoProduto(email, idProduto, promocaoRequest);
+		log.info("[finaliza] ProdutoRestController - aplicaPromocaoAoProduto");
+	}
+
 }

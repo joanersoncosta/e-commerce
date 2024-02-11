@@ -26,6 +26,7 @@ public class ProdutoListResponse {
 	private EstoqueProdutoStatus statusEstoque;
 	private Integer estoque;
 	private Integer produtosVendidos;
+	private String desconto;
 	private String nome;
 	private String descricao;
 	private Double preco;
@@ -38,6 +39,7 @@ public class ProdutoListResponse {
 		this.statusPromocao = produto.getStatusPromocao();
 		this.estoque = produto.getEstoque();
 		this.produtosVendidos  = produto.getProdutosVendidos();
+		this.desconto = produto.getDesconto() + "%";
 		this.nome = produto.getNome();
 		this.descricao = produto.getDescricao();
 		this.preco = produto.getPreco();

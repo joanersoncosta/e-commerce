@@ -15,9 +15,11 @@ import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoListResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
+import br.com.siteware.produto.application.api.PromocaoProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -119,6 +121,17 @@ public class ProdutoApplicationService implements ProdutoService {
 		List<Produto> produtos = produtoRepository.buscaProdutoComPromocao();
 		log.info("[finaliza] ProdutoRestController - buscaProdutoComPromocao");
 		return ProdutoListResponse.converte(produtos);
+	}
+
+	@Override
+	public void aplicaPromocaoAoProduto(String email, UUID idProduto, PromocaoProdutoRequest promocaoRequest) {
+		log.info("[inicia] ProdutoRestController - aplicaPromocaoAoProduto");
+		log.info("[idProduto] {}", idProduto);
+		clienteRepository.detalhaClientePorEmail(email);
+		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produtoRepository.aplicaPromocaoAoProduto(produto, promocaoRequest);
+		log.info("[finaliza] ProdutoRestController - aplicaPromocaoAoProduto");
 	}
 
 }

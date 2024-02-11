@@ -58,4 +58,8 @@ public interface ProdutoAPI {
 	@ResponseStatus(value = HttpStatus.OK)
 	List<ProdutoListResponse> buscaProdutoComPromocao();
 
+	@PatchMapping(path = "/{idProduto}/promocao/inicia")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	void aplicaPromocaoAoProduto(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid PromocaoProdutoRequest promocaoRequest);
+
 }

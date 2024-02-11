@@ -48,6 +48,8 @@ public class Produto {
 	@NotNull
 	private Double preco;
 	private Integer produtosVendidos;
+	private Integer desconto;
+	private Double precoOriginal;
 	private LocalDateTime dataCadastroProduto;
 	private LocalDateTime dataModificacaoProduto;
 
@@ -62,6 +64,8 @@ public class Produto {
 		this.descricao = produtoRequest.getDescricao();
 		this.preco = produtoRequest.getPreco();
 		this.produtosVendidos = 0;
+		this.desconto = 0;
+		this.precoOriginal = produtoRequest.getPreco();
 		this.dataCadastroProduto = LocalDateTime.now();
 	}
 
