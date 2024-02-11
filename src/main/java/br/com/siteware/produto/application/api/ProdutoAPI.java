@@ -62,4 +62,8 @@ public interface ProdutoAPI {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	void aplicaPromocaoAoProduto(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid PromocaoProdutoRequest promocaoRequest);
 
+	@PatchMapping(path = "/{idProduto}/promocao/encerra")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	void encerraPromocaoDoProduto(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto);
+
 }

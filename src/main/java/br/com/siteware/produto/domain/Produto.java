@@ -108,4 +108,11 @@ public class Produto {
 		}
 	}
 
+	public void validaPromocao() {
+		if(!this.promocao.equals(PromocaoProduto.PROMOCAO)) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Este Produto não possui promoção.");
+		}
+		
+	}
+
 }

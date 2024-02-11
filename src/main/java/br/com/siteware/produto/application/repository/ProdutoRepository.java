@@ -30,4 +30,6 @@ public interface ProdutoRepository {
 
 	void aplicaPromocaoAoProduto(Produto produto, PromocaoProdutoRequest promocaoRequest);
 
+	void encerraPromocaoDoProduto(Produto produto);
+
 }

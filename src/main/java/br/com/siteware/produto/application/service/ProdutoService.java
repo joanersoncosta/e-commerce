@@ -34,4 +34,6 @@ public interface ProdutoService {
 
 	void aplicaPromocaoAoProduto(String email, UUID idProduto, PromocaoProdutoRequest promocaoRequest);
 
+	void encerraPromocaoDoProduto(String email, UUID idProduto);
+
 }

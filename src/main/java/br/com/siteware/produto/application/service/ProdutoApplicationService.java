@@ -19,7 +19,6 @@ import br.com.siteware.produto.application.api.PromocaoProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -132,6 +131,18 @@ public class ProdutoApplicationService implements ProdutoService {
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produtoRepository.aplicaPromocaoAoProduto(produto, promocaoRequest);
 		log.info("[finaliza] ProdutoRestController - aplicaPromocaoAoProduto");
+	}
+
+	@Override
+	public void encerraPromocaoDoProduto(String email, UUID idProduto) {
+		log.info("[inicia] ProdutoRestController - encerraPromocaoDoProduto");
+		log.info("[idProduto] {}", idProduto);
+		clienteRepository.detalhaClientePorEmail(email);
+		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produto.validaPromocao();
+		produtoRepository.encerraPromocaoDoProduto(produto);
+		log.info("[finaliza] ProdutoRestController - encerraPromocaoDoProduto");
 	}
 
 }

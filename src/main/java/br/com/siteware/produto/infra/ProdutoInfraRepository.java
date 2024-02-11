@@ -132,4 +132,20 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");
 	}
 
+	@Override
+	public void encerraPromocaoDoProduto(Produto produto) {
+		log.info("[start] ProdutoInfraRepository - encerraPromocaoDoProduto");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
+		
+		Update update = new Update();
+		update.set("desconto", 0);
+		update.set("promocao", PromocaoProduto.NENHUM);
+		update.set("statusPromocao", PromocaoProdutoStatus.INATIVO);
+	    update.set("preco", produto.getPrecoOriginal());
+	    
+		mongoTemplate.updateFirst(query, update, Produto.class);
+		log.info("[finish] ProdutoInfraRepository - encerraPromocaoDoProduto");
+	}
+
 }
