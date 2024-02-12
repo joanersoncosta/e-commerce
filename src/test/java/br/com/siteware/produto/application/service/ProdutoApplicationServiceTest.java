@@ -31,6 +31,7 @@ import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoListResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
+import br.com.siteware.produto.application.api.PromocaoProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
@@ -196,5 +197,25 @@ class ProdutoApplicationServiceTest {
 		assertThat(response).isNotEmpty();
 		assertEquals(4, response.size());
 		assertEquals(PromocaoProdutoStatus.ATIVO, response.get(0).getStatusPromocao());
+	}
+	
+	@Test
+	@DisplayName("Aplica promocao ao Produto")
+	void aplicaPromocaoAoProduto_comPromocaoValida_alteraPromocao() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		Produto produto = mock(Produto.class);
+		PromocaoProdutoRequest request = ProdutoDataHelper.promocaoProdutoRequest();
+		String email = cliente.getEmail();
+		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+		doNothing().when(produtoRepository).aplicaPromocaoAoProduto(produto, request);
+
+		produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request);
+	
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+		verify(produtoRepository, times(1)).aplicaPromocaoAoProduto(produto, request);
 	}
 }
