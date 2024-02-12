@@ -89,4 +89,30 @@ public class ProdutoDataHelper {
 		return new AlteraPromocaoProdutoRequest(2);
 	}
 	
+	public static List<Produto> createListProdutoComPromocao() {
+		return List.of(Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
+				.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)
+				.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 1")
+				.descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0).precoOriginal(704.45)
+				.dataCadastroProduto(LocalDateTime.now()).dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.IMOVEL)
+						.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)
+						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 2")
+						.descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0).desconto(0)
+						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
+						.promocao(PromocaoProduto.LEVE_3_PAGUE_10_REAIS).statusPromocao(PromocaoProdutoStatus.ATIVO)
+						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 3")
+						.descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0).desconto(0)
+						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.COSMETICO)
+						.promocao(PromocaoProduto.LEVE_2_PAGUE_1).statusPromocao(PromocaoProdutoStatus.ATIVO)
+						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 4")
+						.descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0).desconto(0)
+						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build());
+	}
+	
 }

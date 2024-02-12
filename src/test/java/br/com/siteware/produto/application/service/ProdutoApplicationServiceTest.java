@@ -34,6 +34,7 @@ import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
+import br.com.siteware.produto.domain.enuns.PromocaoProdutoStatus;
 
 @ExtendWith(MockitoExtension.class)
 class ProdutoApplicationServiceTest {
@@ -182,4 +183,18 @@ class ProdutoApplicationServiceTest {
 		verify(produtoRepository, times(1)).alteraPromocaoDoProduto(produto, promocao);
 	}
 	
+	@Test
+	@DisplayName("Busca Produto com Promocao")
+	void listaProdutoComPromocao_retornaListaDeProdutos() {
+		List<Produto> produtos = ProdutoDataHelper.createListProdutoComPromocao();
+		when(produtoRepository.buscaProdutoComPromocao()).thenReturn(produtos);
+		
+		List<ProdutoListResponse> response = produtoApplicationService.buscaProdutoComPromocao();
+	
+		verify(produtoRepository, times(1)).buscaProdutoComPromocao();
+
+		assertThat(response).isNotEmpty();
+		assertEquals(4, response.size());
+		assertEquals(PromocaoProdutoStatus.ATIVO, response.get(0).getStatusPromocao());
+	}
 }
