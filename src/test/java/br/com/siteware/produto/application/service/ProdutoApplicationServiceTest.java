@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.siteware.ClienteDataHelper;
 import br.com.siteware.ProdutoDataHelper;
+import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
@@ -87,6 +88,22 @@ class ProdutoApplicationServiceTest {
 		assertThat(response).isNotEmpty();
 		assertEquals(4, response.size());
 		assertEquals(produtos.get(0).getIdProduto(), response.get(0).getIdProduto());
-
 	}
+	
+	@Test
+	@DisplayName("Busca Produtos Por Categoria")
+	void listaProdutoPorCategoria_retornaListaDeProdutos() {
+		List<Produto> produtos = ProdutoDataHelper.createListProdutoCategoria();
+		String categoria = "ELETRONICO";
+		when(produtoRepository.buscaProdutosPorCategoria(any())).thenReturn(produtos);
+		
+		List<ProdutoListResponse> response = produtoApplicationService.buscaProdutosPorCategoria(categoria);
+	
+		verify(produtoRepository, times(1)).buscaProdutosPorCategoria(Categoria.ELETRONICO);
+
+		assertThat(response).isNotEmpty();
+		assertEquals(4, response.size());
+		assertEquals(Categoria.ELETRONICO, response.get(0).getCategoria());
+	}
+
 }
