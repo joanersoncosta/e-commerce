@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.siteware.ClienteDataHelper;
 import br.com.siteware.cliente.application.api.ClienteDetalhadoResponse;
 import br.com.siteware.cliente.application.api.ClienteIdResponse;
+import br.com.siteware.cliente.application.api.ClienteListResponse;
 import br.com.siteware.cliente.application.api.ClienteNovoRequest;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
@@ -35,7 +37,7 @@ class ClienteApplicationServiceTest{
 
 	@Test
 	@DisplayName("Salva Cliente - com dados validos - retorna ClienteIdResponse")
-	void criaNovoCliente() {
+	void criaNovoCliente_comDadosValidos_retornaClienteIdResponse() {
 		ClienteNovoRequest request = ClienteDataHelper.createClienteRequest();
 	
 		when(clienteRepository.salva(any())).thenReturn(new Cliente(request));
@@ -48,8 +50,8 @@ class ClienteApplicationServiceTest{
 	}
 
 	@Test
-	@DisplayName("Busca Cliente por id - com Id valido - retorna dados do cliente")
-	void buscaClientePorId() {
+	@DisplayName("Busca Cliente por id")
+	void buscaClientePorId_comIdClienteValido_retornaClienteDetalhadoResponse() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		String email = cliente.getEmail();
 		UUID idCliente = cliente.getIdCliente();
@@ -68,8 +70,8 @@ class ClienteApplicationServiceTest{
 	}
 	
 	@Test
-	@DisplayName("Busca Cliente por Email - com Email valido - retorna dados do cliente")
-	void buscaClientePorEmail() {
+	@DisplayName("Busca Cliente por Email")
+	void buscaClientePorEmail_comEmailValido_retornaCliente() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		String email = cliente.getEmail();
 		
@@ -82,5 +84,23 @@ class ClienteApplicationServiceTest{
 		assertNotNull(response);
 		assertEquals(response.getIdCliente(), cliente.getIdCliente());
 		assertEquals(Cliente.class, response.getClass());
+	}
+	
+	@Test
+	@DisplayName("Busca Todos os Clientes")
+	void listaClientes_comEmailAdminValido_retornaListaDeClientes() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		List<Cliente> listCliente = ClienteDataHelper.createListCliente();
+		
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(clienteRepository.buscaClientes()).thenReturn(listCliente);
+
+		List<ClienteListResponse> response = clienteApplicationService.buscaTodosOsClientes(email);
+
+		verify(clienteRepository, times(1)).buscaClientes();
+		
+		assertThat(response).isNotEmpty();
+		assertEquals(4, response.size());
 	}
 }
