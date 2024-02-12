@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.siteware.categoria.domain.Categoria;
+import br.com.siteware.produto.application.api.AlteraPromocaoProdutoRequest;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.domain.EstoqueProdutoStatus;
@@ -82,6 +83,10 @@ public class ProdutoDataHelper {
 	
 	public static EditaProdutoRequest editaProdutoRequest() {
 		return new EditaProdutoRequest("Produto request", "Exemplo request", 782.25);
+	}
+	
+	public static AlteraPromocaoProdutoRequest alteraPromocaoProdutoRequest() {
+		return new AlteraPromocaoProdutoRequest(2);
 	}
 	
 }

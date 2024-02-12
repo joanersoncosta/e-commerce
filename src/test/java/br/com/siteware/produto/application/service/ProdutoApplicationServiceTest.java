@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,6 +25,7 @@ import br.com.siteware.ProdutoDataHelper;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.produto.application.api.AlteraPromocaoProdutoRequest;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
@@ -31,6 +33,7 @@ import br.com.siteware.produto.application.api.ProdutoListResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
+import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 
 @ExtendWith(MockitoExtension.class)
 class ProdutoApplicationServiceTest {
@@ -139,7 +142,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Cadastra Produto com sucesso")
+	@DisplayName("Edita Produto")
 	void editaProduto_comDadosValidos_alteraProduto() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = ProdutoDataHelper.createProduto();
@@ -156,5 +159,27 @@ class ProdutoApplicationServiceTest {
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).editaProduto(produto, request);
 	}
+	
+	@Test
+	@DisplayName("Altera promocao do Produto")
+	void alteraPromocaoDoProduto_comPromocaoValida_alteraPromocao() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		Produto produto = mock(Produto.class);
+		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequest();
+		String email = cliente.getEmail();
+		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+		PromocaoProduto promocao = PromocaoProduto.LEVE_2_PAGUE_1;
 
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+		doNothing().when(produtoRepository).alteraPromocaoDoProduto(produto, promocao);
+
+		produtoApplicationService.alteraPromocaoDoProdutoPorId(email, idProduto, request);
+	
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+		verify(produto, times(1)).alteraStatusPromocao(any());
+		verify(produtoRepository, times(1)).alteraPromocaoDoProduto(produto, promocao);
+	}
+	
 }
