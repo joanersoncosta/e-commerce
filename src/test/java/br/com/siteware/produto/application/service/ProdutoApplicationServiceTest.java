@@ -212,10 +212,35 @@ class ProdutoApplicationServiceTest {
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 		doNothing().when(produtoRepository).aplicaPromocaoAoProduto(produto, request);
 
+		Produto response = ProdutoDataHelper.createProdutoComPromocao();
+
 		produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request);
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).aplicaPromocaoAoProduto(produto, request);
+	
+		assertEquals(PromocaoProdutoStatus.ATIVO, response.getStatusPromocao());
+	}
+	
+	@Test
+	@DisplayName("Encerra promocao do Produto")
+	void encerraPromocaoAoProduto_comPromocaoValida_alteraPromocao() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		Produto produto = mock(Produto.class);
+		String email = cliente.getEmail();
+		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+		doNothing().when(produtoRepository).encerraPromocaoDoProduto(produto);
+
+		produtoApplicationService.encerraPromocaoDoProduto(email, idProduto);
+	
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+		verify(produto).validaPromocao();
+		verify(produtoRepository, times(1)).encerraPromocaoDoProduto(produto);
+	
 	}
 }

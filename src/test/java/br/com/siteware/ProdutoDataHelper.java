@@ -119,5 +119,13 @@ public class ProdutoDataHelper {
 	public static PromocaoProdutoRequest promocaoProdutoRequest() {
 		return new PromocaoProdutoRequest(50);
 	}
+
+	public static Produto createProdutoComPromocao() {
+		return Produto.builder().idProduto(ID_PRODUTO).categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.PROMOCAO)
+				.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3)
+				.nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0)
+				.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				.dataModificacaoProduto(LocalDateTime.now()).build();
+	}
 	
 }
