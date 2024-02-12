@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.siteware.categoria.domain.Categoria;
+import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.domain.EstoqueProdutoStatus;
 import br.com.siteware.produto.domain.Produto;
@@ -77,6 +78,10 @@ public class ProdutoDataHelper {
 						.descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0).desconto(0)
 						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build());
+	}
+	
+	public static EditaProdutoRequest editaProdutoRequest() {
+		return new EditaProdutoRequest("Produto request", "Exemplo request", 782.25);
 	}
 	
 }

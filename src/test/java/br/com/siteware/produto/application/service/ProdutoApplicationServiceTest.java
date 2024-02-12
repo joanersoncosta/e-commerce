@@ -24,6 +24,7 @@ import br.com.siteware.ProdutoDataHelper;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.produto.application.api.EditaProdutoRequest;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoListResponse;
@@ -136,4 +137,24 @@ class ProdutoApplicationServiceTest {
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).deletaProduto(produto);
 	}
+	
+	@Test
+	@DisplayName("Cadastra Produto com sucesso")
+	void editaProduto_comDadosValidos_alteraProduto() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		Produto produto = ProdutoDataHelper.createProduto();
+		EditaProdutoRequest request = ProdutoDataHelper.editaProdutoRequest();
+		String email = cliente.getEmail();
+		UUID idProduto = produto.getIdProduto();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+
+		produtoApplicationService.editaProdutoPorId(email, idProduto, request);
+	
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+		verify(produtoRepository, times(1)).editaProduto(produto, request);
+	}
+
 }
