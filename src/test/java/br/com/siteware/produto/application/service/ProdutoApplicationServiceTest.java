@@ -157,9 +157,21 @@ class ProdutoApplicationServiceTest {
 
 		assertThat(response).isEmpty();
 	}
+	
+	@Test
+	@DisplayName("Busca Produtos Por Categoria - Retorna Erro")
+	void listaProdutoPorCategoria_comCategoriaInvalida_retornaErro() {
+		String categoria = "EXEMPLO";
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.buscaProdutosPorCategoria(categoria));
+		
+		assertEquals("Nenhum Produto encontrado para esta categoria.", ex.getMessage());
+		assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
+	}
 
 	@Test
-	@DisplayName("Busca Todos os Produto")
+	@DisplayName("Busca Todos os Produto por Nome")
 	void listaProdutoPorNome_retornaListaDeProdutos() {
 		List<Produto> produtos = ProdutoDataHelper.createListProduto();
 		String nome = "Produto";
@@ -171,6 +183,19 @@ class ProdutoApplicationServiceTest {
 
 		assertThat(response).isNotEmpty();
 		assertEquals(4, response.size());
+	}
+	
+	@Test
+	@DisplayName("Busca Todos os Produto por Nome - retorna lista Vazia")
+	void listaProdutoPorNome_retornaListaVazia() {
+		String nome = "Exemplo";
+		when(produtoRepository.buscaTodosOsProdutos()).thenReturn(Collections.emptyList());
+		
+		List<ProdutoListResponse> response = produtoApplicationService.buscaProdutosPorNome(nome);
+	
+		verify(produtoRepository, times(1)).buscaTodosOsProdutos();
+
+		assertThat(response).isEmpty();
 	}
 	
 	@Test
