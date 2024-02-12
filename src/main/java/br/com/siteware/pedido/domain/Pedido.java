@@ -13,6 +13,7 @@ import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.cliente.application.api.ClienteDetalhadoResponse;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.pedido.domain.enuns.PedidoStatus;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class Pedido {
 	@NotNull
 	private PedidoStatus pedidoStatus;
 	private LocalDateTime momentoDoPedido;
+	@Digits(integer=5, fraction=2)
 	private Double total;
 	
 	public void pertenceAoCliente(ClienteDetalhadoResponse cliente) {
