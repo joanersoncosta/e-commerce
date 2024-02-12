@@ -43,12 +43,12 @@ class ClienteApplicationServiceTest{
 	
 		verify(clienteRepository, times(1)).salva(any());
 		
-		assertThat(response).isNotNull();
-		assertThat(ClienteIdResponse.class).isEqualTo(response.getClass());
+		assertNotNull(response);
+		assertEquals(ClienteIdResponse.class, response.getClass());
 	}
 
 	@Test
-	@DisplayName("Busca Cliente por id - com dados validos - retorna dados do cliente")
+	@DisplayName("Busca Cliente por id - com Id valido - retorna dados do cliente")
 	void buscaClientePorId() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		String email = cliente.getEmail();
@@ -64,6 +64,23 @@ class ClienteApplicationServiceTest{
 		
 		assertNotNull(response);
 		assertEquals(response.getIdCliente(), cliente.getIdCliente());
-		assertThat(ClienteDetalhadoResponse.class).isEqualTo(response.getClass());
+		assertEquals(ClienteDetalhadoResponse.class, response.getClass());
+	}
+	
+	@Test
+	@DisplayName("Busca Cliente por Email - com Email valido - retorna dados do cliente")
+	void buscaClientePorEmail() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+
+		Cliente response = clienteApplicationService.detalhaClientePorEmail(email);
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		
+		assertNotNull(response);
+		assertEquals(response.getIdCliente(), cliente.getIdCliente());
+		assertEquals(Cliente.class, response.getClass());
 	}
 }
