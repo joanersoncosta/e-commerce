@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
+import br.com.siteware.produto.application.api.ProdutoListResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
@@ -71,4 +73,20 @@ class ProdutoApplicationServiceTest {
 		assertEquals(ProdutoDetalhadoResponse.class, response.getClass());
 	}
 
+	@Test
+	@DisplayName("Busca Todos os Produto")
+	void listaProduto_retornaListaDeProdutos() {
+		List<Produto> produtos = ProdutoDataHelper.createListProduto();
+		
+		when(produtoRepository.buscaTodosOsProdutos()).thenReturn(produtos);
+		
+		List<ProdutoListResponse> response = produtoApplicationService.buscaTodosOsProdutos();
+	
+		verify(produtoRepository, times(1)).buscaTodosOsProdutos();
+
+		assertThat(response).isNotEmpty();
+		assertEquals(4, response.size());
+		assertEquals(produtos.get(0).getIdProduto(), response.get(0).getIdProduto());
+
+	}
 }

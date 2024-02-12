@@ -1,6 +1,7 @@
 package br.com.siteware;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import br.com.siteware.categoria.domain.Categoria;
@@ -21,9 +22,35 @@ public class ProdutoDataHelper {
 				.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 				.dataModificacaoProduto(LocalDateTime.now()).build();
 	}
-	
+
 	public static ProdutoRequest createProdutorequest() {
 		return new ProdutoRequest("ELETRONICO", 1, 3, "Produto 1", "Exemplo Produto 1", 704.45);
+	}
+
+	public static List<Produto> createListProduto() {
+		return List.of(Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
+				.promocao(PromocaoProduto.NENHUM).statusPromocao(PromocaoProdutoStatus.INATIVO)
+				.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 1")
+				.descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0).precoOriginal(704.45)
+				.dataCadastroProduto(LocalDateTime.now()).dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.IMOVEL)
+						.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)
+						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 2")
+						.descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0).desconto(0)
+						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
+						.promocao(PromocaoProduto.NENHUM).statusPromocao(PromocaoProdutoStatus.INATIVO)
+						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 3")
+						.descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0).desconto(0)
+						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.COSMETICO)
+						.promocao(PromocaoProduto.LEVE_2_PAGUE_1).statusPromocao(PromocaoProdutoStatus.ATIVO)
+						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 4")
+						.descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0).desconto(0)
+						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build());
 	}
 
 }
