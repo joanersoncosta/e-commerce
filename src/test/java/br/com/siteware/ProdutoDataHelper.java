@@ -78,5 +78,5 @@ public class ProdutoDataHelper {
 						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build());
 	}
-
+	
 }

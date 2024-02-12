@@ -106,4 +106,18 @@ class ProdutoApplicationServiceTest {
 		assertEquals(Categoria.ELETRONICO, response.get(0).getCategoria());
 	}
 
+	@Test
+	@DisplayName("Busca Todos os Produto")
+	void listaProdutoPorNome_retornaListaDeProdutos() {
+		List<Produto> produtos = ProdutoDataHelper.createListProduto();
+		String nome = "Produto";
+		when(produtoRepository.buscaTodosOsProdutos()).thenReturn(produtos);
+		
+		List<ProdutoListResponse> response = produtoApplicationService.buscaProdutosPorNome(nome);
+	
+		verify(produtoRepository, times(1)).buscaTodosOsProdutos();
+
+		assertThat(response).isNotEmpty();
+		assertEquals(4, response.size());
+	}
 }
