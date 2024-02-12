@@ -3,6 +3,7 @@ package br.com.siteware.produto.application.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -119,5 +120,20 @@ class ProdutoApplicationServiceTest {
 
 		assertThat(response).isNotEmpty();
 		assertEquals(4, response.size());
+	}
+	
+	@Test
+	@DisplayName("Deleta Produto Por Id")
+	void deletaProduto_comIdValido_semRetorno() {
+		Produto produto = ProdutoDataHelper.createProduto();
+		UUID idProduto = produto.getIdProduto();
+		
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+		doNothing().when(produtoRepository).deletaProduto(produto);
+		
+		produtoApplicationService.deletaProdutoPorId(idProduto);
+	
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+		verify(produtoRepository, times(1)).deletaProduto(produto);
 	}
 }
