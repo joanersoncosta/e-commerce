@@ -15,7 +15,7 @@ public class ClienteDataHelper {
 	public static Cliente createCliente() {
 		return Cliente.builder().idCliente(ID_USUARIO_VALIDO).nome("Exemplo da Silva").email("exemplo@gmail.com")
 				.sexo(Sexo.FEMININO).dataNascimento(LocalDate.parse("1997-05-12"))
-				.momentoDoDacastro(LocalDateTime.now()).build();
+				.momentoDoDacastro(LocalDateTime.now()).dataHoraDaultimaAlteracao(LocalDateTime.now()).build();
 	}
 
 	public static ClienteNovoRequest createClienteRequest() {
