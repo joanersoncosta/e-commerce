@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -114,6 +115,18 @@ class ProdutoApplicationServiceTest {
 		assertThat(response).isNotEmpty();
 		assertEquals(4, response.size());
 		assertEquals(produtos.get(0).getIdProduto(), response.get(0).getIdProduto());
+	}
+	
+	@Test
+	@DisplayName("Busca Todos os Produto - retorna lista Vazia")
+	void listaProduto_retornaListaVazia() {
+		when(produtoRepository.buscaTodosOsProdutos()).thenReturn(Collections.emptyList());
+		
+		List<ProdutoListResponse> response = produtoApplicationService.buscaTodosOsProdutos();
+	
+		verify(produtoRepository, times(1)).buscaTodosOsProdutos();
+
+		assertThat(response).isEmpty();
 	}
 	
 	@Test
