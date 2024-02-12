@@ -7,6 +7,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +21,7 @@ import br.com.siteware.ClienteDataHelper;
 import br.com.siteware.ProdutoDataHelper;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
@@ -50,6 +54,21 @@ class ProdutoApplicationServiceTest {
 
 		assertThat(response).isNotNull();
 		assertEquals(ProdutoIdResponse.class, response.getClass());
+	}
+	
+	@Test
+	@DisplayName("Busca Produto Por Id")
+	void buscaProduto_comIdValido_retornaProdutoDetalhadoResponse() {
+		Produto produto = ProdutoDataHelper.createProduto();
+		UUID idProduto = produto.getIdProduto();
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+		
+		ProdutoDetalhadoResponse response = produtoApplicationService.buscaProdutoPorId(idProduto);
+	
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+
+		assertThat(response).isNotNull();
+		assertEquals(ProdutoDetalhadoResponse.class, response.getClass());
 	}
 
 }
