@@ -197,7 +197,7 @@ class ProdutoApplicationServiceTest {
 
 		assertThat(response).isEmpty();
 	}
-//	;;;;;;;.
+
 	@Test
 	@DisplayName("Deleta Produto Por Id")
 	void deletaProduto_comIdValido_semRetorno() {
@@ -236,6 +236,7 @@ class ProdutoApplicationServiceTest {
 		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
 	
+	
 	@Test
 	@DisplayName("Edita Produto")
 	void editaProduto_comDadosValidos_alteraProduto() {
@@ -253,6 +254,27 @@ class ProdutoApplicationServiceTest {
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).editaProduto(produto, request);
+	}
+	
+	@Test
+	@DisplayName("Edita Produto com IdInvalido - retorna Erro")
+	void editaProduto_comIdInvalido_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		EditaProdutoRequest request = ProdutoDataHelper.editaProdutoRequest();
+		String email = cliente.getEmail();
+		UUID idProduto = UUID.randomUUID();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.editaProdutoPorId(email, idProduto, request));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+	
+		assertEquals("Produto não encontrado.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
 	
 	@Test
