@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -162,7 +163,34 @@ class CarrinhoApplicationServiceTest {
 	}
 
 	@Test
-	void removeCarrinho() {
+	@DisplayName("Remove Produto do Carrinho")
+	void removeCarrinho_comIdValido_removeProdutoDoCarrinho() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		Produto produtoMock = mock(Produto.class);
+		UUID idProduto = produtoMock.getIdProduto();
+		Carrinho carrinhoMock = mock(Carrinho.class);
+		UUID idCarrinho = CarrinhoDataHelper.createCarrinho().getIdCarrinho();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produtoMock));
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.of(carrinhoMock));
+		doNothing().when(carrinhoRepository).atualizaProdutosVendidos(carrinhoMock, produtoMock);
+		doNothing().when(carrinhoRepository).removeCarrinho(carrinhoMock);
+		
+		carrinhoApplicationService.removeCarrinho(email, idCarrinho);;
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
+		verify(carrinhoMock, times(1)).pertenceCliente(cliente);
+		verify(carrinhoRepository, times(1)).atualizaProdutosVendidos(carrinhoMock, produtoMock);
+		verify(carrinhoRepository, times(1)).removeCarrinho(any());
+	}
+	
+	@Test
+	@DisplayName("Remove Produto com idCarrinho Invalido")
+	void removeCarrinho_comIdCarrinhoInvalido_retornaErro() {
 	}
 
 	@Test
