@@ -450,6 +450,26 @@ class ProdutoApplicationServiceTest {
 	
 		assertEquals("Produto não encontrado.", ex.getMessage());
 		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
+	}
 	
+	@Test
+	@DisplayName("Encerra promocao com Promocao Inexistente, retorna erro")
+	void encerraPromocaoDoProduto_comPromocaoInexistente_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		Produto produto = ProdutoDataHelper.createProduto();
+		String email = cliente.getEmail();
+		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.encerraPromocaoDoProduto(email, idProduto));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+	
+		assertEquals("Este Produto não possui promoção.", ex.getMessage());
+		assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
 	}
 }
