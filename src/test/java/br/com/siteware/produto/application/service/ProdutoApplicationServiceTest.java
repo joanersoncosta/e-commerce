@@ -414,7 +414,7 @@ class ProdutoApplicationServiceTest {
 	
 	@Test
 	@DisplayName("Encerra promocao do Produto")
-	void encerraPromocaoAoProduto_comPromocaoValida_alteraPromocao() {
+	void encerraPromocaoDoProduto_comPromocaoValida_alteraPromocao() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = mock(Produto.class);
 		String email = cliente.getEmail();
@@ -430,6 +430,26 @@ class ProdutoApplicationServiceTest {
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produto).validaPromocao();
 		verify(produtoRepository, times(1)).encerraPromocaoDoProduto(produto);
+	}
+	
+	@Test
+	@DisplayName("Encerra promocao com IdProduto invalido, retorna erro")
+	void encerraPromocaoDoProduto_comIdProdutoInvalido_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		UUID idProduto = UUID.randomUUID();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.encerraPromocaoDoProduto(email, idProduto));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+	
+		assertEquals("Produto não encontrado.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	
 	}
 }
