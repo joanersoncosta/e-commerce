@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.siteware.carrinho.application.api.CarrinhoRequest;
+import br.com.siteware.carrinho.application.api.EditaCarrinhoRequest;
 import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.produto.domain.Produto;
 
@@ -41,5 +42,9 @@ public class CarrinhoDataHelper {
 						.idProduto(produtos.get(3).getIdProduto()).promocao(produtos.get(3).getPromocao())
 						.nome(produtos.get(3).getNome()).descricao(produtos.get(3).getDescricao())
 						.preco(produto.getPreco()).quantidade(1).subTotal(704.45).build());
+	}
+	
+	public static EditaCarrinhoRequest editaCarrinhoRequest() {
+		return new EditaCarrinhoRequest(1);
 	}
 }

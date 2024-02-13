@@ -29,6 +29,7 @@ import br.com.siteware.ProdutoDataHelper;
 import br.com.siteware.carrinho.application.api.CarrinhoIdResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoListResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoRequest;
+import br.com.siteware.carrinho.application.api.EditaCarrinhoRequest;
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
@@ -210,6 +211,23 @@ class CarrinhoApplicationServiceTest {
 
 	@Test
 	void editaCarrinho() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		Carrinho carrinhoMock = mock(Carrinho.class);
+		UUID idCarrinho = CarrinhoDataHelper.createCarrinho().getIdCarrinho();
+		EditaCarrinhoRequest request = CarrinhoDataHelper.editaCarrinhoRequest();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.of(carrinhoMock));
+		doNothing().when(carrinhoRepository).atualizaCarrinho(carrinhoMock);
+		
+		carrinhoApplicationService.editaCarrinho(email, idCarrinho, request);
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
+		verify(carrinhoMock, times(1)).pertenceCliente(cliente);
+		verify(carrinhoMock, times(1)).atualizaCarrinho(request);
+		verify(carrinhoRepository, times(1)).atualizaCarrinho(carrinhoMock);
 	}
 
 }
