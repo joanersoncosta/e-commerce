@@ -340,7 +340,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Busca Produto com Promocao")
+	@DisplayName("Busca Produtos com Promocao")
 	void listaProdutoComPromocao_retornaListaDeProdutos() {
 		List<Produto> produtos = ProdutoDataHelper.createListProdutoComPromocao();
 		when(produtoRepository.buscaProdutoComPromocao()).thenReturn(produtos);
@@ -352,6 +352,18 @@ class ProdutoApplicationServiceTest {
 		assertThat(response).isNotEmpty();
 		assertEquals(4, response.size());
 		assertEquals(PromocaoProdutoStatus.ATIVO, response.get(0).getStatusPromocao());
+	}
+	
+	@Test
+	@DisplayName("Busca Produtos com Promocao, retorna Lista Vazia")
+	void listaProdutoComPromocao_retornaListaVazia() {
+		when(produtoRepository.buscaProdutoComPromocao()).thenReturn(Collections.emptyList());
+		
+		List<ProdutoListResponse> response = produtoApplicationService.buscaProdutoComPromocao();
+	
+		verify(produtoRepository, times(1)).buscaProdutoComPromocao();
+
+		assertThat(response).isEmpty();
 	}
 	
 	@Test
