@@ -56,6 +56,7 @@ class CarrinhoApplicationServiceTest {
 		Produto produto = ProdutoDataHelper.createProduto();
 		Produto produtoMock = mock(Produto.class);
 		CarrinhoRequest request = CarrinhoDataHelper.carrinhoRequest();
+		
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produtoMock));
 		when(carrinhoRepository.salva(any())).thenReturn(new Carrinho(cliente.getIdCliente(), produto, request.getQuantidade()));
@@ -131,7 +132,18 @@ class CarrinhoApplicationServiceTest {
 	}
 
 	@Test
-	void detalhaCarrinho() {
+	@DisplayName("Detalha Carrinho")
+	void detalhaCarrinho_comIdCarrinhoValido_retornaCarrinho() {
+		Carrinho carrinho = CarrinhoDataHelper.createCarrinho();
+		UUID idCarrinho = carrinho.getIdCarrinho();
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(carrinho);
+
+		Carrinho response = carrinhoApplicationService.detalhaCarrinho(idCarrinho);
+		
+		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
+
+		assertThat(response).isNotNull();
+		assertEquals(Carrinho.class, response.getClass());
 	}
 
 	@Test
