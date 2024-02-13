@@ -11,4 +11,8 @@ public class CarrinhoDataHelper {
 	public static CarrinhoRequest carrinhoRequest() {
 		return new CarrinhoRequest(ID_PRODUTO, 1);
 	}
+
+	public static CarrinhoRequest carrinhoRequestInvalido() {
+		return new CarrinhoRequest(UUID.randomUUID(), 1);
+	}
 }

@@ -34,7 +34,7 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		log.info("[email] {}", email);
 		Cliente cliente = clienteRepository.detalhaClientePorEmail(email);
 		Produto produto = produtoRepository.detalhaProdutoPorId(carrinhoRequest.getIdProduto())
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado!"));
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		try {
 			produto.validaEstoque(carrinhoRequest.getQuantidade());
 			produto.incrementaProdutosVendidos(carrinhoRequest.getQuantidade());

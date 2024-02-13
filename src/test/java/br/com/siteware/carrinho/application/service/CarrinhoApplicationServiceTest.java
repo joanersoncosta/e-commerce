@@ -2,6 +2,7 @@ package br.com.siteware.carrinho.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import br.com.siteware.CarrinhoDataHelper;
 import br.com.siteware.ClienteDataHelper;
@@ -27,6 +29,7 @@ import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 
@@ -66,6 +69,25 @@ class CarrinhoApplicationServiceTest {
 
 		assertThat(response).isNotNull();
 		assertEquals(CarrinhoIdResponse.class, response.getClass());
+	}
+	
+	@Test
+	@DisplayName("Adiciona Produto com IdProduto Invalido, retorna erro")
+	void adicionaProdutoAoCarrinho_comIdProdutoInvalido_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		CarrinhoRequest request = CarrinhoDataHelper.carrinhoRequestInvalido();
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
+
+		APIException ex = assertThrows(APIException.class,
+				() -> carrinhoApplicationService.adicionaProdutoAoCarrinho(email, request));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(request.getIdProduto());
+
+		assertEquals("Produto não encontrado.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
 
 	@Test
