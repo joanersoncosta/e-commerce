@@ -391,6 +391,28 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
+	@DisplayName("Aplica promocao com IdProduto invalido, retorna erro")
+	void aplicaPromocaoAoProduto_comidProdutoInvalido_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		PromocaoProdutoRequest request = ProdutoDataHelper.promocaoProdutoRequest();
+		String email = cliente.getEmail();
+		UUID idProduto = UUID.randomUUID();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+	
+		assertEquals("Produto não encontrado.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
+	
+	}
+	
+	@Test
 	@DisplayName("Encerra promocao do Produto")
 	void encerraPromocaoAoProduto_comPromocaoValida_alteraPromocao() {
 		Cliente cliente = ClienteDataHelper.createCliente();
