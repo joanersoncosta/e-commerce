@@ -136,7 +136,7 @@ class CarrinhoApplicationServiceTest {
 	void detalhaCarrinho_comIdCarrinhoValido_retornaCarrinho() {
 		Carrinho carrinho = CarrinhoDataHelper.createCarrinho();
 		UUID idCarrinho = carrinho.getIdCarrinho();
-		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(carrinho);
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.of(carrinho));
 
 		Carrinho response = carrinhoApplicationService.detalhaCarrinho(idCarrinho);
 		
@@ -144,6 +144,11 @@ class CarrinhoApplicationServiceTest {
 
 		assertThat(response).isNotNull();
 		assertEquals(Carrinho.class, response.getClass());
+	}
+	
+	@Test
+	@DisplayName("Detalha Carrinho com idCarrinho invalido")
+	void detalhaCarrinho_comIdCarrinhoInvalido_retornaErro() {
 	}
 
 	@Test

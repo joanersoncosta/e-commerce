@@ -61,7 +61,8 @@ public class CarrinhoApplicationService implements CarrinhoService {
 	public Carrinho detalhaCarrinho(UUID idCarrinho) {
 		log.info("[inicia] CarrinhoApplicationService - detalhaCarrinho");
 		log.info("[idCarrinho] {}", idCarrinho);
-		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
+		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Carrinho não encontrado."));
 		log.info("[finaliza] CarrinhoApplicationService - detalhaCarrinho");
 		return carrinho;
 	}
@@ -72,7 +73,8 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		Cliente clienteEmail = clienteRepository.detalhaClientePorEmail(email);
 		log.info("[clienteEmail] {}", clienteEmail);
 		log.info("[idCarrinho] {}", idCarrinho);
-		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
+		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Carrinho não encontrado."));
 		Produto produto = produtoRepository.detalhaProdutoPorId(carrinho.getIdProduto())
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado!"));
 		carrinho.pertenceCliente(clienteEmail);
@@ -87,7 +89,8 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		Cliente clienteEmail = clienteRepository.detalhaClientePorEmail(email);
 		log.info("[clienteEmail] {}", clienteEmail);
 		log.info("[idCarrinho] {}", idCarrinho);
-		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho);
+		Carrinho carrinho = carrinhoRepository.buscaCarrinhoPorId(idCarrinho)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Carrinho não encontrado."));
 		carrinho.pertenceCliente(clienteEmail);
 		carrinho.atualizaCarrinho(carrinhoRequest);
 		carrinhoRepository.atualizaCarrinho(carrinho);
