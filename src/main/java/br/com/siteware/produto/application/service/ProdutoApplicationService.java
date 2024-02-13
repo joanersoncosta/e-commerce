@@ -78,9 +78,10 @@ public class ProdutoApplicationService implements ProdutoService {
 	}
 
 	@Override
-	public void deletaProdutoPorId(UUID idProduto) {
+	public void deletaProdutoPorId(String email, UUID idProduto) {
 		log.info("[inicia] ProdutoRestController - buscaProdutoPorId");
 		log.info("[idProduto] {}", idProduto);
+		clienteRepository.detalhaClientePorEmail(email);
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produtoRepository.deletaProduto(produto);

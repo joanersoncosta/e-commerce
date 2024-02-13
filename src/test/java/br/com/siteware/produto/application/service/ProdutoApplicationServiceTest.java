@@ -197,20 +197,43 @@ class ProdutoApplicationServiceTest {
 
 		assertThat(response).isEmpty();
 	}
-	
+//	;;;;;;;.
 	@Test
 	@DisplayName("Deleta Produto Por Id")
 	void deletaProduto_comIdValido_semRetorno() {
+		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = ProdutoDataHelper.createProduto();
 		UUID idProduto = produto.getIdProduto();
-		
+		String email = "exemplo@gmail.com";
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 		doNothing().when(produtoRepository).deletaProduto(produto);
 		
-		produtoApplicationService.deletaProdutoPorId(idProduto);
+		produtoApplicationService.deletaProdutoPorId(email, idProduto);
 	
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).deletaProduto(produto);
+	}
+	
+	@Test
+	@DisplayName("Deleta Produto com IdInvalido")
+	void deletaProduto_comIdInvalido_retornoErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		UUID idProduto = UUID.randomUUID();
+		String email = "exemplo@gmail.com";
+		
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.deletaProdutoPorId(email, idProduto));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+
+		assertEquals("Produto não encontrado.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
 	
 	@Test

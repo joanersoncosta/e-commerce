@@ -44,7 +44,7 @@ public interface ProdutoAPI {
 
 	@DeleteMapping(path = "/{idProduto}/deleta")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void deletaProdutoPorId(@PathVariable(value = "idProduto") UUID idProduto);
+	void deletaProdutoPorId(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto);
 
 	@PatchMapping(path = "/{idProduto}/edita")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
