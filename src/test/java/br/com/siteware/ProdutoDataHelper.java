@@ -25,6 +25,14 @@ public class ProdutoDataHelper {
 				.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 				.dataModificacaoProduto(LocalDateTime.now()).build();
 	}
+	
+	public static Produto adicionarProdutoAoCarrinho() {
+		return Produto.builder().idProduto(ID_PRODUTO).categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
+				.statusPromocao(PromocaoProdutoStatus.INATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3)
+				.nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0)
+				.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				.dataModificacaoProduto(LocalDateTime.now()).build();
+	}
 
 	public static ProdutoRequest createProdutorequest() {
 		return new ProdutoRequest("ELETRONICO", 1, 3, "Produto 1", "Exemplo Produto 1", 704.45);
