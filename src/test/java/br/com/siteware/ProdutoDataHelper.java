@@ -90,6 +90,10 @@ public class ProdutoDataHelper {
 		return new AlteraPromocaoProdutoRequest(2);
 	}
 	
+	public static AlteraPromocaoProdutoRequest alteraPromocaoProdutoRequestComPromocaoInvalida() {
+		return new AlteraPromocaoProdutoRequest(25);
+	}
+	
 	public static List<Produto> createListProdutoComPromocao() {
 		return List.of(Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
 				.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)

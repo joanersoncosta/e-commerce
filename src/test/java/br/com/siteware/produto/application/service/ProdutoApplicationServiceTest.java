@@ -300,6 +300,25 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
+	@DisplayName("Altera promocao do produto com Promocao Invalida - retorna erro")
+	void alteraPromocaoDoProduto_comPromocaoInvalida_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequestComPromocaoInvalida();
+		String email = cliente.getEmail();
+		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.alteraPromocaoDoProdutoPorId(email, idProduto, request));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+
+		assertEquals("Promoção invalida.", ex.getMessage());
+		assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
+	}
+	
+	@Test
 	@DisplayName("Busca Produto com Promocao")
 	void listaProdutoComPromocao_retornaListaDeProdutos() {
 		List<Produto> produtos = ProdutoDataHelper.createListProdutoComPromocao();
