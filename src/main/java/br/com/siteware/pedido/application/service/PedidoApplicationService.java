@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
-import br.com.siteware.cliente.application.service.ClienteService;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.pedido.application.api.PedidoDetalhadoResponse;
 import lombok.RequiredArgsConstructor;

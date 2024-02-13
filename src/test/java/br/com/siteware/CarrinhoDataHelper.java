@@ -47,4 +47,8 @@ public class CarrinhoDataHelper {
 	public static EditaCarrinhoRequest editaCarrinhoRequest() {
 		return new EditaCarrinhoRequest(1);
 	}
+
+	public static List<Carrinho> createListCarrinhoVazio() {
+		return List.of();
+	}
 }

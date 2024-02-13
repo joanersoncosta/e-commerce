@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +54,27 @@ class PedidoApplicationServiceTest {
 
 		assertThat(produtos).isNotEmpty();
 		assertEquals(3, produtos.size());
+		assertThat(response).isNotNull();
+		assertEquals(PedidoDetalhadoResponse.class, response.getClass());
+	}
+	
+	@Test
+	@DisplayName("Retorna Pedido sem Produtos associados")
+	void buscaPedido_comClienteLogado_retornaListaProdutosVazio() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		UUID idCliente = cliente.getIdCliente();
+		List<Carrinho> produtos = CarrinhoDataHelper.createListCarrinhoVazio();
+		
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(Collections.emptyList());
+
+		PedidoDetalhadoResponse response = pedidoApplicationService.buscaPedido(email);
+	
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
+
+		assertThat(produtos).isEmpty();
 		assertThat(response).isNotNull();
 		assertEquals(PedidoDetalhadoResponse.class, response.getClass());
 	}
