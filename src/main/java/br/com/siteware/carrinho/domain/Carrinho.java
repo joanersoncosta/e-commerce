@@ -76,10 +76,7 @@ public class Carrinho {
 	}
 
 	public void atualizaCarrinho(EditaCarrinhoRequest carrinhoRequest) {
-		int novaQuantidade = carrinhoRequest.getQuantidade();
-	    if (novaQuantidade <= 0) {
-	        throw APIException.build(HttpStatus.BAD_REQUEST, "A quantidade deve ser maior que zero.");
-	    }
+		validaQuantidade(carrinhoRequest.getQuantidade());
 		this.quantidade = carrinhoRequest.getQuantidade();
 	    this.subTotal = calculaSubTotal();
 	}
