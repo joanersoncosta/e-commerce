@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ import br.com.siteware.CarrinhoDataHelper;
 import br.com.siteware.ClienteDataHelper;
 import br.com.siteware.ProdutoDataHelper;
 import br.com.siteware.carrinho.application.api.CarrinhoIdResponse;
+import br.com.siteware.carrinho.application.api.CarrinhoListResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoRequest;
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
@@ -91,7 +93,22 @@ class CarrinhoApplicationServiceTest {
 	}
 
 	@Test
-	void listaCarrinhoDoCliente() {
+	void listaCarrinhoDoCliente_comUsuarioLogado_retornaListaProdutosNoCarrinho() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		UUID idCliente = cliente.getIdCliente();
+		List<Carrinho> produtos = CarrinhoDataHelper.createListCarrinho();
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(produtos);
+
+		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email);
+	
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
+
+		assertThat(response).isNotEmpty();
+		assertEquals(3, response.size());
+		assertEquals(produtos.get(0).getIdProduto(), response.get(0).getIdProduto());
 	}
 
 	@Test
