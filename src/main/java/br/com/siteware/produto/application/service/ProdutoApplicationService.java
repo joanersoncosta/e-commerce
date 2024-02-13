@@ -48,7 +48,6 @@ public class ProdutoApplicationService implements ProdutoService {
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		log.info("[finaliza] ProdutoRestController - buscaProdutoPorId");
 		return produtoResponse;
-
 	}
 
 	@Override
