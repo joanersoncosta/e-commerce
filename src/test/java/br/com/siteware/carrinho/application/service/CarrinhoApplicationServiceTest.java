@@ -191,6 +191,21 @@ class CarrinhoApplicationServiceTest {
 	@Test
 	@DisplayName("Remove Produto com idCarrinho Invalido")
 	void removeCarrinho_comIdCarrinhoInvalido_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		UUID idCarrinho = UUID.randomUUID();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.empty());
+		
+		APIException ex = assertThrows(APIException.class, 
+				() -> carrinhoApplicationService.removeCarrinho(email, idCarrinho));
+		
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
+	
+	    assertEquals("Carrinho não encontrado.", ex.getMessage());
+	    assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
 
 	@Test
