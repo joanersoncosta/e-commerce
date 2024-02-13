@@ -149,6 +149,16 @@ class CarrinhoApplicationServiceTest {
 	@Test
 	@DisplayName("Detalha Carrinho com idCarrinho invalido")
 	void detalhaCarrinho_comIdCarrinhoInvalido_retornaErro() {
+	    UUID idCarrinho = UUID.randomUUID();
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.empty());
+
+	    APIException ex = assertThrows(APIException.class, 
+	            () -> carrinhoApplicationService.detalhaCarrinho(idCarrinho));
+	    
+	    verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
+
+	    assertEquals("Carrinho não encontrado.", ex.getMessage());
+	    assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
 
 	@Test
