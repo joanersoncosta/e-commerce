@@ -210,7 +210,8 @@ class CarrinhoApplicationServiceTest {
 	}
 
 	@Test
-	void editaCarrinho() {
+	@DisplayName("Edita quantidade de Produtos do Carrinho")
+	void editaCarrinho_comDadosValidos_alteraQuandidedeProdutos() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		String email = cliente.getEmail();
 		Carrinho carrinhoMock = mock(Carrinho.class);
@@ -229,5 +230,28 @@ class CarrinhoApplicationServiceTest {
 		verify(carrinhoMock, times(1)).atualizaCarrinho(request);
 		verify(carrinhoRepository, times(1)).atualizaCarrinho(carrinhoMock);
 	}
+	
+	@Test
+	@DisplayName("Retorna erro ao editar quantidade de Produtos do Carrinho")
+	void editaCarrinho_comIdCarrinhoInvalido_retornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		String email = cliente.getEmail();
+		UUID idCarrinho = UUID.randomUUID();
+		EditaCarrinhoRequest request = CarrinhoDataHelper.editaCarrinhoRequest();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.empty());
+		
+		APIException ex = assertThrows(APIException.class, 
+				() -> carrinhoApplicationService.editaCarrinho(email, idCarrinho, request));
+		
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
+	
+	    assertEquals("Carrinho não encontrado.", ex.getMessage());
+	    assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
+	
+	}
+
 
 }
