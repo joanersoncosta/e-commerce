@@ -86,7 +86,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Busca Produto Por Id - retorna erro")
+	@DisplayName("Busca Produto Por Id, retorna erro")
 	void buscaProduto_comIdInvalido_retornaErro() {
 		UUID idProduto = UUID.randomUUID();
 		
@@ -118,7 +118,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Busca Todos os Produto - retorna lista Vazia")
+	@DisplayName("Busca Todos os Produto, retorna lista Vazia")
 	void listaProduto_retornaListaVazia() {
 		when(produtoRepository.buscaTodosOsProdutos()).thenReturn(Collections.emptyList());
 		
@@ -146,7 +146,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Busca Produtos Por Categoria - Retorna lista vazia")
+	@DisplayName("Busca Produtos Por Categoria, Retorna lista vazia")
 	void listaProdutoPorCategoria_retornaListaVazia() {
 		String categoria = "ELETRONICO";
 		when(produtoRepository.buscaProdutosPorCategoria(any())).thenReturn(Collections.emptyList());
@@ -159,7 +159,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Busca Produtos Por Categoria - Retorna Erro")
+	@DisplayName("Busca Produtos Por Categoria, Retorna Erro")
 	void listaProdutoPorCategoria_comCategoriaInvalida_retornaErro() {
 		String categoria = "EXEMPLO";
 
@@ -186,7 +186,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Busca Todos os Produto por Nome - retorna lista Vazia")
+	@DisplayName("Busca Todos os Produto por Nome, retorna lista Vazia")
 	void listaProdutoPorNome_retornaListaVazia() {
 		String nome = "Exemplo";
 		when(produtoRepository.buscaTodosOsProdutos()).thenReturn(Collections.emptyList());
@@ -257,7 +257,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Edita Produto com IdInvalido - retorna Erro")
+	@DisplayName("Edita Produto com IdInvalido, retorna Erro")
 	void editaProduto_comIdInvalido_retornaErro() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		EditaProdutoRequest request = ProdutoDataHelper.editaProdutoRequest();
@@ -300,7 +300,7 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
-	@DisplayName("Altera promocao do produto com Promocao Invalida - retorna erro")
+	@DisplayName("Altera promocao do produto com Promocao Invalida, retorna erro")
 	void alteraPromocaoDoProduto_comPromocaoInvalida_retornaErro() {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequestComPromocaoInvalida();
@@ -316,6 +316,27 @@ class ProdutoApplicationServiceTest {
 
 		assertEquals("Promoção invalida.", ex.getMessage());
 		assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
+	}
+	
+	@Test
+	@DisplayName("Altera promocao do Produto com IdProduto Invalido, retorna erro")
+	void alteraPromocaoDoProduto_comIdInvalido_rtornaErro() {
+		Cliente cliente = ClienteDataHelper.createCliente();
+		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequest();
+		String email = cliente.getEmail();
+		UUID idProduto = UUID.randomUUID();
+
+		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
+
+		APIException ex = assertThrows(APIException.class,
+				() -> produtoApplicationService.alteraPromocaoDoProdutoPorId(email, idProduto, request));
+
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
+	
+		assertEquals("Produto não encontrado.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
 	
 	@Test
