@@ -18,7 +18,7 @@ public class CrendencialApplicationService implements CredencialService {
 	@Override
 	public void criaNovaCredencial(CredencialCliente clienteNovo) {
 		log.info("[inicia] CrendencialService - criaNovaCredencial");
-		var novaCredencial = new Credencial(clienteNovo.getEmail(), clienteNovo.getSenha(), clienteNovo.getNome());
+		var novaCredencial = new Credencial(clienteNovo.getEmail(), clienteNovo.getSenha(), clienteNovo.getPerfil());
 		credencialRepository.salva(novaCredencial);
 		log.info("[finaliza] CrendencialService - criaNovaCredencial");
 	}
@@ -26,7 +26,7 @@ public class CrendencialApplicationService implements CredencialService {
 	@Override
 	public void criaNovaCredencial(CredencialAdmin credencialAdmin) {
 		log.info("[inicia] CrendencialService - criaNovaCredencial");
-		var novaCredencial = new Credencial(credencialAdmin.getEmail(), credencialAdmin.getSenha(), credencialAdmin.getNome());
+		var novaCredencial = new Credencial(credencialAdmin.getEmail(), credencialAdmin.getSenha(), credencialAdmin.getPerfil());
 		credencialRepository.salva(novaCredencial);
 	}
 	

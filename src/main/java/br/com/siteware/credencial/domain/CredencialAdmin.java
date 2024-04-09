@@ -12,11 +12,12 @@ public class CredencialAdmin {
 	@Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
 	private String senha;
 	@NotNull
-	private Perfil nome;
+	private Perfil perfil;
 	
 	public CredencialAdmin(AdminRequest admin) {
 		this.email = admin.getEmail();
 		this.senha = admin.getSenha();
-		this.nome = new Perfil("ADMIN");
+		this.perfil = new Perfil(AuthorityUsuario.ADMIN.name());
 	}
+	
 }

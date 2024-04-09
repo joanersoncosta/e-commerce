@@ -1,15 +1,17 @@
 package br.com.siteware.credencial.domain;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -20,25 +22,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Document(collection = "Credencial")
 public class Credencial implements UserDetails {
-	@MongoId
+	
+	@Id
 	@Getter
+	private UUID idCredencial;
+	@Getter
+	@Indexed(unique = true)
 	private String usuario;
-
 	@NotNull
 	@Size(max = 60)
+	@Getter
 	private String senha;
-
-	@NotNull
-	private Perfil perfil;
+	
+	@Getter
+    private Set<Perfil> authoritie = new HashSet<>();
 
 	@Getter
 	private boolean validado;
 
-	public Credencial(String usuario, String senha, Perfil nome) {
+	public Credencial(String usuario, String senha, Perfil roles) {
+		this.idCredencial = UUID.randomUUID();
 		this.usuario = usuario;
 		var encriptador = new BCryptPasswordEncoder();
 		this.senha = encriptador.encode(senha);
-		this.perfil = nome;
+		this.authoritie.add(roles);
 		this.validado = true;
 	}
 
@@ -53,10 +60,7 @@ public class Credencial implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if (perfil.getNome().equals("ADMIN"))
-			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_CLIENTE"));
-		else
-			return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+		return authoritie;
 	}
 
 	@Override
