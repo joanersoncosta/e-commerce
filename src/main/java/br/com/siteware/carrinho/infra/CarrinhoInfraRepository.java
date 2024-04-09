@@ -1,17 +1,21 @@
 package br.com.siteware.carrinho.infra;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.handler.APIException;
+import br.com.siteware.produto.domain.EstoqueProdutoStatus;
+import br.com.siteware.produto.domain.Produto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,7 +29,11 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 	@Override
 	public Carrinho salva(Carrinho carrinho) {
 		log.info("[start] CarrinhoInfraRepository - salva");
-		carrinhoSpringMongoDbRepository.save(carrinho);
+		try {
+			carrinhoSpringMongoDbRepository.save(carrinho);
+		}catch(APIException e) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Erro ao adicionar o Produto ao carrinho.", e);
+		}
 		log.info("[finish] CarrinhoInfraRepository - salva");
 		return carrinho;
 	}
@@ -41,10 +49,9 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 	}
 
 	@Override
-	public Carrinho buscaCarrinhoPorId(UUID idCarrinho) {
+	public Optional<Carrinho> buscaCarrinhoPorId(UUID idCarrinho) {
 		log.info("[start] CarrinhoInfraRepository - salva");
-		Carrinho carrinho  = carrinhoSpringMongoDbRepository.findById(idCarrinho)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Carrinho não encontrado."));
+		Optional<Carrinho> carrinho  = carrinhoSpringMongoDbRepository.findById(idCarrinho);
 		log.info("[finish] CarrinhoInfraRepository - salva");
 		return carrinho;
 	}
@@ -61,8 +68,26 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 	@Override
 	public void atualizaCarrinho(Carrinho carrinho) {
 		log.info("[start] CarrinhoInfraRepository - removeCarrinho");
-		carrinhoSpringMongoDbRepository.save(carrinho);
+		try {
+			carrinhoSpringMongoDbRepository.save(carrinho);
+		}catch(APIException e) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Erro ao atualizar Produto do carrinho.", e);
+		}
 		log.info("[finish] CarrinhoInfraRepository - removeCarrinho");
+	}
+
+	@Override
+	public void atualizaProdutosVendidos(Carrinho carrinho, Produto produto) {
+		log.info("[start] CarrinhoInfraRepository - atualizaProdutosVendidos");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
+		
+		Update update = new Update();
+		update.set("produtosVendidos", produto.getProdutosVendidos() - carrinho.getQuantidade())
+		.set("statusEstoque", EstoqueProdutoStatus.DISPONIVEL);
+		
+		mongoTemplate.updateFirst(query, update, Produto.class);
+		log.info("[finish] CarrinhoInfraRepository - atualizaProdutosVendidos");
 	}
 
 }

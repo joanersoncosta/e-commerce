@@ -6,16 +6,15 @@ import java.util.UUID;
 import br.com.siteware.carrinho.application.api.CarrinhoIdResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoListResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoRequest;
-import br.com.siteware.carrinho.application.api.EditaCarrinhoRequest;
 
 public interface CarrinhoService {
 
 	CarrinhoIdResponse adicionaProdutoAoCarrinho(String email, CarrinhoRequest carrinhoRequest);
 
-	List<CarrinhoListResponse> listaCarrinhoDoCliente(String email);
+	List<CarrinhoListResponse> listaCarrinhoDoCliente(String email, UUID idCliente);
 
 	void removeCarrinho(String email, UUID idCarrinho);
 
-	void editaCarrinho(String email, UUID idCarrinho, EditaCarrinhoRequest carrinhoRequest);
+	void editaCarrinho(String email, UUID idCarrinho, Integer quantidade);
 
 }
