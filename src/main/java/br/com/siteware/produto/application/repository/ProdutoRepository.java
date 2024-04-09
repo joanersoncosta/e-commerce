@@ -27,4 +27,8 @@ public interface ProdutoRepository {
 
 	List<Produto> buscaProdutoComPromocao();
 
+	void aplicaPromocaoAoProduto(Produto produto, Integer percentualDesconto);
+
+	void encerraPromocaoDoProduto(Produto produto);
+
 }
