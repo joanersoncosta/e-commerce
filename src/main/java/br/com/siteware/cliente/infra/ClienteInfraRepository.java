@@ -34,15 +34,15 @@ public class ClienteInfraRepository implements ClienteRepository {
 
 	@Override
 	public Optional<Cliente> detalhaClientePorId(UUID idCliente) {
-		log.info("[inicia] ClienteInfraRepository - detalhaClientePorId");
+		log.info("[start] ClienteInfraRepository - detalhaClientePorId");
 		Optional<Cliente> cliente = clienteSpringDBMongoRepository.findById(idCliente);
-		log.info("[inicia] ClienteInfraRepository - detalhaClientePorId");
+		log.info("[finish] ClienteInfraRepository - detalhaClientePorId");
 		return cliente;
 	}
 
 	@Override
 	public Cliente detalhaClientePorEmail(String emailCliente) {
-		log.info("[inicia] ClienteInfraRepository - detalhaClientePorEmail");
+		log.info("[start] ClienteInfraRepository - detalhaClientePorEmail");
 		Cliente cliente = clienteSpringDBMongoRepository.findByEmail(emailCliente).orElseThrow(() -> 
 			APIException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado para esse email."));
 		log.info("[inicia] ClienteInfraRepository - detalhaClientePorEmail");
@@ -51,7 +51,7 @@ public class ClienteInfraRepository implements ClienteRepository {
 
 	@Override
 	public List<Cliente> buscaClientes() {
-		log.info("[inicia] ClienteInfraRepository - buscaClientes");
+		log.info("[start] ClienteInfraRepository - buscaClientes");
 		List<Cliente> clientes = clienteSpringDBMongoRepository .findAll();
 		log.info("[inicia] ClienteInfraRepository - buscaClientes");
 		return clientes;
