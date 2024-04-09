@@ -1,8 +1,7 @@
 package br.com.siteware.credencial.domain;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -11,10 +10,13 @@ import javax.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import br.com.siteware.handler.APIException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,17 +37,17 @@ public class Credencial implements UserDetails {
 	private String senha;
 	
 	@Getter
-    private Set<Perfil> authoritie = new HashSet<>();
+    private Perfil perfil;
 
 	@Getter
 	private boolean validado;
 
-	public Credencial(String usuario, String senha, Perfil roles) {
+	public Credencial(String usuario, String senha, Perfil perfil) {
 		this.idCredencial = UUID.randomUUID();
 		this.usuario = usuario;
 		var encriptador = new BCryptPasswordEncoder();
 		this.senha = encriptador.encode(senha);
-		this.authoritie.add(roles);
+		this.perfil = perfil;
 		this.validado = true;
 	}
 
@@ -60,7 +62,11 @@ public class Credencial implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authoritie;
+		if (perfil.getNome().equals("ADMIN")) {
+			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_CLIENTE"),
+					new SimpleGrantedAuthority("ROLE_CLIENTE"));
+		}
+		return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
 	}
 
 	@Override
@@ -94,4 +100,10 @@ public class Credencial implements UserDetails {
 	}
 
 	private static final long serialVersionUID = 1L;
+
+	public void validaAdmin() {
+		if(!perfil.getNome().equals("ADMIN")) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
+		}
+	}
 }
