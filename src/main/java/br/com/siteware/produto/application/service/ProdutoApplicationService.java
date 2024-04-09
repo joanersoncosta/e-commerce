@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.com.siteware.categoria.domain.Categoria;
-import br.com.siteware.cliente.application.repository.ClienteRepository;
+import br.com.siteware.credencial.application.service.CredencialService;
+import br.com.siteware.credencial.domain.Credencial;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.AlteraPromocaoProdutoRequest;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
@@ -26,14 +27,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ProdutoApplicationService implements ProdutoService {
 	private final ProdutoRepository produtoRepository;
-	private final ClienteRepository clienteRepository;
-	
+	private final CredencialService credencialService;
+
 	@Override
 	public ProdutoIdResponse cadastraProduto(String email, ProdutoRequest produtoRequest) {
 		log.info("[inicia] ProdutoApplicationService - cadastraProduto");
-		log.info("[email] {}", email);
-		clienteRepository.detalhaClientePorEmail(email);
-		Produto produto = produtoRepository.salva(new Produto(produtoRequest));
+		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
+		credencialUsuario.validaAdmin();
+		Produto produto = produtoRepository.salva(new Produto(credencialUsuario.getUsername(), produtoRequest));
 		log.info("[finaliza] ProdutoApplicationService - cadastraProduto");
 		return ProdutoIdResponse.builder().idProduto(produto.getIdProduto()).build();
 	}
@@ -47,7 +48,6 @@ public class ProdutoApplicationService implements ProdutoService {
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		log.info("[finaliza] ProdutoRestController - buscaProdutoPorId");
 		return produtoResponse;
-
 	}
 
 	@Override
@@ -77,11 +77,14 @@ public class ProdutoApplicationService implements ProdutoService {
 	}
 
 	@Override
-	public void deletaProdutoPorId(UUID idProduto) {
+	public void deletaProdutoPorId(String email, UUID idProduto) {
 		log.info("[inicia] ProdutoRestController - buscaProdutoPorId");
 		log.info("[idProduto] {}", idProduto);
+		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
+		credencialUsuario.validaAdmin();
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produto.pertenceAoUsuario(credencialUsuario.getUsername());
 		produtoRepository.deletaProduto(produto);
 		log.info("[finaliza] ProdutoRestController - buscaProdutoPorId");
 	}
@@ -90,9 +93,11 @@ public class ProdutoApplicationService implements ProdutoService {
 	public void editaProdutoPorId(String email, UUID idProduto, EditaProdutoRequest editaProduto) {
 		log.info("[inicia] ProdutoRestController - editaProdutoPorId");
 		log.info("[idProduto] {}", idProduto);
-		clienteRepository.detalhaClientePorEmail(email);
+		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
+		credencialUsuario.validaAdmin();
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produto.pertenceAoUsuario(credencialUsuario.getUsername());
 		produtoRepository.editaProduto(produto, editaProduto);
 		log.info("[finaliza] ProdutoRestController - editaProdutoPorId");
 	}
@@ -102,12 +107,14 @@ public class ProdutoApplicationService implements ProdutoService {
 			AlteraPromocaoProdutoRequest request) {
 		log.info("[inicia] ProdutoRestController - editaProdutoPorId");
 		log.info("[idProduto] {}", idProduto);
-		clienteRepository.detalhaClientePorEmail(email);
+		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
+		credencialUsuario.validaAdmin();
 		PromocaoProduto promocao = PromocaoProduto.validaPromocao(request.getPromocao())
 				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Promoção invalida."));
 
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produto.pertenceAoUsuario(credencialUsuario.getUsername());
 		produto.alteraStatusPromocao(promocao);
 		produtoRepository.alteraPromocaoDoProduto(produto, promocao);
 		log.info("[finaliza] ProdutoRestController - editaProdutoPorId");
@@ -119,6 +126,33 @@ public class ProdutoApplicationService implements ProdutoService {
 		List<Produto> produtos = produtoRepository.buscaProdutoComPromocao();
 		log.info("[finaliza] ProdutoRestController - buscaProdutoComPromocao");
 		return ProdutoListResponse.converte(produtos);
+	}
+
+	@Override
+	public void aplicaPromocaoAoProduto(String email, UUID idProduto, Integer percentualDesconto) {
+		log.info("[inicia] ProdutoRestController - aplicaPromocaoAoProduto");
+		log.info("[idProduto] {}", idProduto);
+		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
+		credencialUsuario.validaAdmin();
+		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produto.pertenceAoUsuario(credencialUsuario.getUsername());
+		produtoRepository.aplicaPromocaoAoProduto(produto, percentualDesconto);
+		log.info("[finaliza] ProdutoRestController - aplicaPromocaoAoProduto");
+	}
+
+	@Override
+	public void encerraPromocaoDoProduto(String email, UUID idProduto) {
+		log.info("[inicia] ProdutoRestController - encerraPromocaoDoProduto");
+		log.info("[idProduto] {}", idProduto);
+		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
+		credencialUsuario.validaAdmin();
+		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+		produto.pertenceAoUsuario(credencialUsuario.getUsername());
+		produto.validaPromocao();
+		produtoRepository.encerraPromocaoDoProduto(produto);
+		log.info("[finaliza] ProdutoRestController - encerraPromocaoDoProduto");
 	}
 
 }

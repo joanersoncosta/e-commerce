@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum PromocaoProduto {
-	NENHUM(1), LEVE_2_PAGUE_1(2), LEVE_3_PAGUE_10_REAIS(3);
+	NENHUM(1), LEVE_2_PAGUE_1(2), LEVE_3_PAGUE_10_REAIS(3), PROMOCAO(4);
 
 	private Integer promocao;
 

@@ -1,6 +1,7 @@
 package br.com.siteware.produto.application.api;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

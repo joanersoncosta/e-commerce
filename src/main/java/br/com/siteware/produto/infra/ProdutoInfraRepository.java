@@ -83,7 +83,8 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		Update update = new Update();
 		update.set("nome", request.getNome())
 			.set("descricao", request.getDescricao())
-			.set("preco", request.getPreco());
+			.set("preco", request.getPreco())
+			.set("precoOriginal", request.getPreco());
 		
 		mongoTemplate.updateFirst(query, update,Produto.class);
 		log.info("[finish] ProdutoInfraRepository - editaProduto");
@@ -112,6 +113,38 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 		List<Produto> produtos = mongoTemplate.find(query, Produto.class);
 		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");
 		return produtos;
+	}
+
+	@Override
+	public void aplicaPromocaoAoProduto(Produto produto, Integer percentualDesconto) {
+		log.info("[start] ProdutoInfraRepository - alteraPromocaoDoProduto");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
+		
+		Update update = new Update();
+		update.set("desconto", percentualDesconto);
+		update.set("promocao", PromocaoProduto.PROMOCAO);
+		update.set("statusPromocao", PromocaoProdutoStatus.ATIVO);
+	    update.multiply("preco", (1 - (percentualDesconto / 100.0)));
+	    
+		mongoTemplate.updateFirst(query, update, Produto.class);
+		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");
+	}
+
+	@Override
+	public void encerraPromocaoDoProduto(Produto produto) {
+		log.info("[start] ProdutoInfraRepository - encerraPromocaoDoProduto");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
+		
+		Update update = new Update();
+		update.set("desconto", 0);
+		update.set("promocao", PromocaoProduto.NENHUM);
+		update.set("statusPromocao", PromocaoProdutoStatus.INATIVO);
+	    update.set("preco", produto.getPrecoOriginal());
+	    
+		mongoTemplate.updateFirst(query, update, Produto.class);
+		log.info("[finish] ProdutoInfraRepository - encerraPromocaoDoProduto");
 	}
 
 }
