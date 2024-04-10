@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,14 @@ public class RestResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(ErrorApiResponse.builder().description("INTERNAL SERVER ERROR!")
 						.message("POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!").build());
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ErrorApiResponse> accessDeniedException(AccessDeniedException ex) {
+		log.error("Exception: ", ex);
+		return ResponseEntity.status(HttpStatus.FORBIDDEN)
+				.body(ErrorApiResponse.builder()
+						.message("Acesso negado").build());
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

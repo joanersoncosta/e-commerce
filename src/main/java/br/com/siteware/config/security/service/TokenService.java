@@ -2,19 +2,13 @@ package br.com.siteware.config.security.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import br.com.siteware.credencial.domain.Credencial;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,15 +31,6 @@ public class TokenService {
 
     public String gerarToken(Credencial credencial) {
         log.info("[inicio] TokenService - criação de token");
-//        Set<Perfil> authorities = credencial.getAuthoritie();
-//        List<String> roles = new ArrayList<>();
-//        for (Perfil authority : authorities) {
-//            roles.add(authority.getNome());
-//        }
-//        Map<String, Object> claimsMap = new HashMap<>();
-//        claimsMap.put("authorities",roles);
-//        claimsMap.put("username", credencial.getUsername());
-//        claimsMap.put("idCredencial", credencial.getIdCredencial());
         String token = Jwts.builder()
                 .setIssuer("API do Produdoro")
                 .setSubject(credencial.getUsuario())
@@ -55,7 +40,6 @@ public class TokenService {
                         .atZone(ZoneId.systemDefault())
                         .toInstant()))
                 .signWith(SignatureAlgorithm.HS512, chave)//
-//                .addClaims(claimsMap)
                 .compact();
         log.info("[finaliza] TokenService - criação de token");
 		return token;
@@ -76,39 +60,12 @@ public class TokenService {
         }
     }
 
-//    public Claims parseJwtClaims(String token) {
-//        try {
-//            log.info("[inicio] TokenService - extração do ID do Token");
-//            var claims = Jwts.parser().setSigningKey(chave).parseClaimsJws(token).getBody();
-//            log.info("[finaliza] TokenService - extração do ID do Token");
-//            return claims;
-//        } catch (SignatureException ex) {
-//            return null;
-//        } catch (ExpiredJwtException ex) {
-//            var claims = ex.getClaims();
-//            log.info("[finaliza] TokenService - extração do ID do Token");
-//            return claims;
-//        }
-//    }
-
     public Optional<String> getUsuarioByBearerToken(String bearerToken) {
         log.info("[inicio] TokenService - getUsuarioByBearerToken");
         String token = bearerToken.substring(7, bearerToken.length());
         log.info(token);
         log.info("[finaliza] TokenService - getUsuarioByBearerToken");
         return this.getUsuario(token);
-    }
-    
-    public Collection<GrantedAuthority> extAuthorities(Claims claims) {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        if (claims.containsKey("authorities")) {
-            @SuppressWarnings("unchecked")
-			List<String> roles = (List<String>) claims.get("authorities");
-            for (String role : roles) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-            }
-        }
-        return authorities;
     }
 
 }

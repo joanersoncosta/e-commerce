@@ -30,7 +30,7 @@ public interface ClienteAPI {
 
 	@GetMapping(value = "/admin/busca-clientes")
 	@ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	List<ClienteListResponse> buscaTodosOsClientes(@RequestHeader(name = "Authorization", required = true) String token);
 
 }

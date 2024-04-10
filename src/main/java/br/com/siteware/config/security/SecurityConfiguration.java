@@ -1,7 +1,5 @@
 package br.com.siteware.config.security;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.com.siteware.config.security.enuns.AuthUrlMapping;
-import br.com.siteware.config.security.enuns.RoleAuth;
 import br.com.siteware.config.security.service.AutenticacaoSecurityService;
 import br.com.siteware.config.security.service.TokenService;
 import br.com.siteware.credencial.application.service.CredencialService;
@@ -48,7 +45,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override
 	protected void configure (HttpSecurity http) throws Exception {
 	        http.csrf(csrf -> csrf.disable())
 	                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -57,14 +53,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                            		.antMatchers(AuthUrlMapping.ADMIN.getUrls()).hasAnyAuthority(RoleAuth.ROLE_ADMIN.name())
 	                                .antMatchers(AuthUrlMapping.PERMIT_ALL.getUrls()).permitAll()
 	                                .anyRequest().authenticated()
-	                ).exceptionHandling(exceptionHandling -> exceptionHandling
+	                )/*.exceptionHandling(exceptionHandling -> exceptionHandling
 	                        .authenticationEntryPoint((request, response, authException) ->
 	                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED)
 	                        )
 	                        .accessDeniedHandler((request, response, accessDeniedException) ->
 	                                response.setStatus(HttpServletResponse.SC_FORBIDDEN)
 	                        )
-	                ).addFilterBefore(new FiltroToken(tokenService, credencialService), UsernamePasswordAuthenticationFilter.class);
+	                )*/.addFilterBefore(new FiltroToken(tokenService, credencialService), UsernamePasswordAuthenticationFilter.class);
 	    }
 	
 	@Override

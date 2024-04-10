@@ -40,8 +40,6 @@ public class APIException extends RuntimeException {
 	private static String getMessageCause(Exception e) {
 		return e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
 	}
-	
-	
 
 	public ResponseEntity<ErrorApiResponse> buildErrorResponseEntity() {
 		return ResponseEntity
@@ -50,4 +48,5 @@ public class APIException extends RuntimeException {
 	}
 	
 	private static final long serialVersionUID = 1L;
+
 }

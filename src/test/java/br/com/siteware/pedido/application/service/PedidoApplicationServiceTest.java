@@ -47,7 +47,7 @@ class PedidoApplicationServiceTest {
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(produtos);
 
-		PedidoDetalhadoResponse response = pedidoApplicationService.buscaPedido(email);
+		PedidoDetalhadoResponse response = pedidoApplicationService.buscaPedido(email, cliente.getIdCliente());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
@@ -69,7 +69,7 @@ class PedidoApplicationServiceTest {
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(Collections.emptyList());
 
-		PedidoDetalhadoResponse response = pedidoApplicationService.buscaPedido(email);
+		PedidoDetalhadoResponse response = pedidoApplicationService.buscaPedido(email, cliente.getIdCliente());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);

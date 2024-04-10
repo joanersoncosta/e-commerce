@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +26,7 @@ public interface ProdutoAPI {
 
 	@PostMapping(path = "/admin/cadastra")
 	@ResponseStatus(value = HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	ProdutoIdResponse cadastraProduto(@RequestHeader(name = "Authorization", required = true) String token, @RequestBody @Valid ProdutoRequest produtoRequest);
 
 	@GetMapping(path = "/public/{idProduto}/busca")
@@ -45,14 +47,17 @@ public interface ProdutoAPI {
 
 	@DeleteMapping(path = "/admin/{idProduto}/deleta")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	void deletaProdutoPorId(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto);
 
 	@PatchMapping(path = "/admin/{idProduto}/edita")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	void editaProdutoPorId(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid EditaProdutoRequest editaProduto);
 
 	@PatchMapping(path = "/admin/{idProduto}/promocao/altera")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	void alteraPromocaoDoProdutoPorId(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid AlteraPromocaoProdutoRequest editaPromocaoProduto);
 
 	@GetMapping(path = "/public/busca/promocao")
@@ -61,10 +66,12 @@ public interface ProdutoAPI {
 
 	@PatchMapping(path = "/admin/{idProduto}/promocao/inicia")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	void aplicaPromocaoAoProduto(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto, @PathParam(value = "percentualDesconto") Integer percentualDesconto);
 
 	@PatchMapping(path = "/admin/{idProduto}/promocao/encerra")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	void encerraPromocaoDoProduto(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto);
 
 }

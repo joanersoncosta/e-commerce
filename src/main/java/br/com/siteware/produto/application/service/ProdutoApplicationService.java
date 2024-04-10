@@ -33,7 +33,7 @@ public class ProdutoApplicationService implements ProdutoService {
 	public ProdutoIdResponse cadastraProduto(String email, ProdutoRequest produtoRequest) {
 		log.info("[inicia] ProdutoApplicationService - cadastraProduto");
 		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
-		credencialUsuario.validaAdmin();
+		credencialUsuario.validaAcessoAdmin();
 		Produto produto = produtoRepository.salva(new Produto(credencialUsuario.getUsername(), produtoRequest));
 		log.info("[finaliza] ProdutoApplicationService - cadastraProduto");
 		return ProdutoIdResponse.builder().idProduto(produto.getIdProduto()).build();
@@ -81,7 +81,7 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[inicia] ProdutoRestController - buscaProdutoPorId");
 		log.info("[idProduto] {}", idProduto);
 		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
-		credencialUsuario.validaAdmin();
+		credencialUsuario.validaAcessoAdmin();
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produto.pertenceAoUsuario(credencialUsuario.getUsername());
@@ -94,7 +94,7 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[inicia] ProdutoRestController - editaProdutoPorId");
 		log.info("[idProduto] {}", idProduto);
 		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
-		credencialUsuario.validaAdmin();
+		credencialUsuario.validaAcessoAdmin();
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produto.pertenceAoUsuario(credencialUsuario.getUsername());
@@ -108,7 +108,7 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[inicia] ProdutoRestController - editaProdutoPorId");
 		log.info("[idProduto] {}", idProduto);
 		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
-		credencialUsuario.validaAdmin();
+		credencialUsuario.validaAcessoAdmin();
 		PromocaoProduto promocao = PromocaoProduto.validaPromocao(request.getPromocao())
 				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Promoção invalida."));
 
@@ -133,7 +133,7 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[inicia] ProdutoRestController - aplicaPromocaoAoProduto");
 		log.info("[idProduto] {}", idProduto);
 		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
-		credencialUsuario.validaAdmin();
+		credencialUsuario.validaAcessoAdmin();
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produto.pertenceAoUsuario(credencialUsuario.getUsername());
@@ -146,7 +146,7 @@ public class ProdutoApplicationService implements ProdutoService {
 		log.info("[inicia] ProdutoRestController - encerraPromocaoDoProduto");
 		log.info("[idProduto] {}", idProduto);
 		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
-		credencialUsuario.validaAdmin();
+		credencialUsuario.validaAcessoAdmin();
 		Produto produto = produtoRepository.detalhaProdutoPorId(idProduto)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Produto não encontrado."));
 		produto.pertenceAoUsuario(credencialUsuario.getUsername());

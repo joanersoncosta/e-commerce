@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/public/admin")
+@RequestMapping("/private/admin")
 public interface AdminAPI {
 
 	@PostMapping(path = "/cadastro")

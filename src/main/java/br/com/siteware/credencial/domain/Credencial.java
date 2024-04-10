@@ -101,9 +101,9 @@ public class Credencial implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	public void validaAdmin() {
+	public void validaAcessoAdmin() {
 		if(!perfil.getNome().equals("ADMIN")) {
-			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
+			throw APIException.build(HttpStatus.FORBIDDEN, "Acesso negado");
 		}
 	}
 }

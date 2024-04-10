@@ -70,7 +70,7 @@ public class ClienteApplicationService implements ClienteService {
 	public List<ClienteListResponse> buscaTodosOsClientes(String email) {
 		log.info("[inicia] ClienteApplicationService - buscaTodosOsClientes");
 		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
-//		credencialUsuario.validaAdmin();
+		credencialUsuario.validaAcessoAdmin();
 		List<Cliente> clientes = clienteRepository.buscaClientes();		
 		log.info("[finaliza] ClienteApplicationService - buscaTodosOsClientes");
 		return ClienteListResponse.converte(clientes);
