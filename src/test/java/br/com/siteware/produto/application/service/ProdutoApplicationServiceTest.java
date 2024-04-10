@@ -255,17 +255,17 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Deleta Produto com IdInvalido")
 	void deletaProduto_comIdInvalido_retornoErro() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		UUID idProduto = UUID.randomUUID();
-		String email = "exemplo@gmail.com";
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 		
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
 
 		APIException ex = assertThrows(APIException.class,
 				() -> produtoApplicationService.deletaProdutoPorId(email, idProduto));
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 
 		assertEquals("Produto não encontrado.", ex.getMessage());
