@@ -20,12 +20,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.siteware.ClienteDataHelper;
+import br.com.siteware.CredencialDataHelpher;
 import br.com.siteware.cliente.application.api.ClienteDetalhadoResponse;
 import br.com.siteware.cliente.application.api.ClienteIdResponse;
 import br.com.siteware.cliente.application.api.ClienteListResponse;
 import br.com.siteware.cliente.application.api.ClienteNovoRequest;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.credencial.application.service.CredencialService;
+import br.com.siteware.credencial.domain.Credencial;
 
 @ExtendWith(MockitoExtension.class)
 class ClienteApplicationServiceTest{
@@ -34,6 +37,8 @@ class ClienteApplicationServiceTest{
 	private ClienteApplicationService clienteApplicationService;
 	@Mock
 	private ClienteRepository clienteRepository;
+	@Mock
+	private CredencialService credencialService;
 
 	@Test
 	@DisplayName("Salva Cliente - com dados validos - retorna ClienteIdResponse")
@@ -89,15 +94,16 @@ class ClienteApplicationServiceTest{
 	@Test
 	@DisplayName("Busca Todos os Clientes")
 	void listaClientes_comEmailAdminValido_retornaListaDeClientes() {
-		Cliente cliente = ClienteDataHelper.createCliente();
-		String email = cliente.getEmail();
 		List<Cliente> listCliente = ClienteDataHelper.createListCliente();
-		
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(clienteRepository.buscaClientes()).thenReturn(listCliente);
 
 		List<ClienteListResponse> response = clienteApplicationService.buscaTodosOsClientes(email);
 
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(clienteRepository, times(1)).buscaClientes();
 		
 		assertThat(response).isNotEmpty();
