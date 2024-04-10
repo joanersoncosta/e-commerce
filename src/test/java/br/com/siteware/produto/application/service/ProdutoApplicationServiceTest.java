@@ -219,6 +219,23 @@ class ProdutoApplicationServiceTest {
 	}
 
 	@Test
+	@DisplayName("Deleta Produto com credencial nao autorizada")
+	void deletaProduto_comCredencialDeCliente_retornaAcessoNegado() {
+		Produto produto = ProdutoDataHelper.createProduto();
+		UUID idProduto = produto.getIdProduto();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialCliente();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		
+		APIException ex = assertThrows(APIException.class, () -> produtoApplicationService.deletaProdutoPorId(credencialUsuario.getUsername(), idProduto));
+
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
+
+		assertEquals("Acesso negado", ex.getMessage());
+		assertEquals(HttpStatus.FORBIDDEN, ex.getStatusException());
+	}
+	
+	@Test
 	@DisplayName("Deleta Produto Por Id")
 	void deletaProduto_comIdValido_semRetorno() {
 		Produto produto = ProdutoDataHelper.createProduto();
