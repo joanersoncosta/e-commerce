@@ -1,7 +1,7 @@
 server:
  servlet:
    context-path: /siteware/api
-   
+
 spring:    
   data:
     mongodb:
@@ -17,4 +17,3 @@ e-commerce:
   jwt:
     expiracao: ${JWT_TEMPO_EXPIRACAO:15}
     chave: ${JWT_CHAVE:123456}     
-      
