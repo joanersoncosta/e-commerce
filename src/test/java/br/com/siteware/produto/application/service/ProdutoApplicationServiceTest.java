@@ -23,12 +23,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import br.com.siteware.ClienteDataHelper;
 import br.com.siteware.CredencialDataHelpher;
 import br.com.siteware.ProdutoDataHelper;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
-import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.credencial.application.service.CredencialService;
 import br.com.siteware.credencial.domain.Credencial;
 import br.com.siteware.handler.APIException;
@@ -294,18 +292,18 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Edita Produto com IdInvalido, retorna Erro")
 	void editaProduto_comIdInvalido_retornaErro() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		EditaProdutoRequest request = ProdutoDataHelper.editaProdutoRequest();
-		String email = cliente.getEmail();
 		UUID idProduto = UUID.randomUUID();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
 
 		APIException ex = assertThrows(APIException.class,
 				() -> produtoApplicationService.editaProdutoPorId(email, idProduto, request));
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 	
 		assertEquals("Produto não encontrado.", ex.getMessage());
@@ -313,41 +311,79 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
+	@DisplayName("Edita Produto com credencial nao autorizada")
+	void editaProdutoProduto_comCredencialDeCliente_retornaAcessoNegado() {
+		Produto produto = ProdutoDataHelper.createProduto();
+		UUID idProduto = produto.getIdProduto();
+		EditaProdutoRequest request = ProdutoDataHelper.editaProdutoRequest();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialCliente();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		
+		APIException ex = assertThrows(APIException.class, () -> produtoApplicationService.editaProdutoPorId(credencialUsuario.getUsername(), idProduto, request));
+
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
+
+		assertEquals("Acesso negado", ex.getMessage());
+		assertEquals(HttpStatus.FORBIDDEN, ex.getStatusException());
+	}
+	
+	@Test
 	@DisplayName("Altera promocao do Produto")
 	void alteraPromocaoDoProduto_comPromocaoValida_alteraPromocao() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = mock(Produto.class);
 		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequest();
-		String email = cliente.getEmail();
 		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
 		PromocaoProduto promocao = PromocaoProduto.LEVE_2_PAGUE_1;
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 		doNothing().when(produtoRepository).alteraPromocaoDoProduto(produto, promocao);
 
 		produtoApplicationService.alteraPromocaoDoProdutoPorId(email, idProduto, request);
 	
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produto, times(1)).alteraStatusPromocao(any());
 		verify(produtoRepository, times(1)).alteraPromocaoDoProduto(produto, promocao);
 	}
 	
 	@Test
+	@DisplayName("Altera Promocao do Produto com credencial nao autorizada")
+	void alteraPromocaoDoProduto_comCredencialDeCliente_retornaAcessoNegado() {
+		Produto produto = ProdutoDataHelper.createProduto();
+		UUID idProduto = produto.getIdProduto();
+		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequestComPromocaoInvalida();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialCliente();
+		String email = credencialUsuario.getUsername();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		
+		APIException ex = assertThrows(APIException.class, () -> produtoApplicationService.alteraPromocaoDoProdutoPorId(email, idProduto, request));
+
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
+
+		assertEquals("Acesso negado", ex.getMessage());
+		assertEquals(HttpStatus.FORBIDDEN, ex.getStatusException());
+	}
+	
+	@Test
 	@DisplayName("Altera promocao do produto com Promocao Invalida, retorna erro")
 	void alteraPromocaoDoProduto_comPromocaoInvalida_retornaErro() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequestComPromocaoInvalida();
-		String email = cliente.getEmail();
 		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 
 		APIException ex = assertThrows(APIException.class,
 				() -> produtoApplicationService.alteraPromocaoDoProdutoPorId(email, idProduto, request));
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 
 		assertEquals("Promoção invalida.", ex.getMessage());
 		assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
@@ -356,18 +392,18 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Altera promocao do Produto com IdProduto Invalido, retorna erro")
 	void alteraPromocaoDoProduto_comIdInvalido_rtornaErro() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		AlteraPromocaoProdutoRequest request = ProdutoDataHelper.alteraPromocaoProdutoRequest();
-		String email = cliente.getEmail();
 		UUID idProduto = UUID.randomUUID();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
 
 		APIException ex = assertThrows(APIException.class,
 				() -> produtoApplicationService.alteraPromocaoDoProdutoPorId(email, idProduto, request));
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 	
 		assertEquals("Produto não encontrado.", ex.getMessage());
@@ -404,21 +440,19 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Aplica promocao ao Produto")
 	void aplicaPromocaoAoProduto_comPromocaoValida_alteraPromocao() {
-		Cliente cliente = ClienteDataHelper.createCliente();
-		Produto produto = mock(Produto.class);
+		Produto produto = ProdutoDataHelper.createProduto();
 		PromocaoProdutoRequest request = ProdutoDataHelper.promocaoProdutoRequest();
-		String email = cliente.getEmail();
-		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+		UUID idProduto = produto.getIdProduto();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 		doNothing().when(produtoRepository).aplicaPromocaoAoProduto(produto, request.getPercentualDesconto());
-
 		Produto response = ProdutoDataHelper.createProdutoComPromocao();
-
 		produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request.getPercentualDesconto());
 	
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).aplicaPromocaoAoProduto(produto, request.getPercentualDesconto());
 	
@@ -426,20 +460,39 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
+	@DisplayName("Aplica Promocao ao Produto com credencial nao autorizada")
+	void aplicaPromocaoAoProduto_comCredencialDeCliente_retornaAcessoNegado() {
+		Produto produto = ProdutoDataHelper.createProduto();
+		UUID idProduto = produto.getIdProduto();
+		PromocaoProdutoRequest request = ProdutoDataHelper.promocaoProdutoRequest();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialCliente();
+		String email = credencialUsuario.getUsername();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		
+		APIException ex = assertThrows(APIException.class, () -> produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request.getPercentualDesconto()));
+
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
+
+		assertEquals("Acesso negado", ex.getMessage());
+		assertEquals(HttpStatus.FORBIDDEN, ex.getStatusException());
+	}
+	
+	@Test
 	@DisplayName("Aplica promocao com IdProduto invalido, retorna erro")
 	void aplicaPromocaoAoProduto_comidProdutoInvalido_retornaErro() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		PromocaoProdutoRequest request = ProdutoDataHelper.promocaoProdutoRequest();
-		String email = cliente.getEmail();
 		UUID idProduto = UUID.randomUUID();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
 
 		APIException ex = assertThrows(APIException.class,
 				() -> produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request.getPercentualDesconto()));
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 	
 		assertEquals("Produto não encontrado.", ex.getMessage());
@@ -450,37 +503,56 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Encerra promocao do Produto")
 	void encerraPromocaoDoProduto_comPromocaoValida_alteraPromocao() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = mock(Produto.class);
-		String email = cliente.getEmail();
 		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 		doNothing().when(produtoRepository).encerraPromocaoDoProduto(produto);
 
 		produtoApplicationService.encerraPromocaoDoProduto(email, idProduto);
 	
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produto).validaPromocao();
 		verify(produtoRepository, times(1)).encerraPromocaoDoProduto(produto);
 	}
 	
 	@Test
+	@DisplayName("Encerra Promocao Do Produto com credencial nao autorizada")
+	void encerraPromocaoDoProduto_comCredencialDeCliente_retornaAcessoNegado() {
+		Produto produto = ProdutoDataHelper.createProduto();
+		UUID idProduto = produto.getIdProduto();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialCliente();
+		String email = credencialUsuario.getUsername();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		
+		APIException ex = assertThrows(APIException.class, () -> produtoApplicationService.encerraPromocaoDoProduto(email, idProduto));
+
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
+
+		assertEquals("Acesso negado", ex.getMessage());
+		assertEquals(HttpStatus.FORBIDDEN, ex.getStatusException());
+	}
+	
+	@Test
 	@DisplayName("Encerra promocao com IdProduto invalido, retorna erro")
 	void encerraPromocaoDoProduto_comIdProdutoInvalido_retornaErro() {
-		Cliente cliente = ClienteDataHelper.createCliente();
-		String email = cliente.getEmail();
 		UUID idProduto = UUID.randomUUID();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
 
 		APIException ex = assertThrows(APIException.class,
 				() -> produtoApplicationService.encerraPromocaoDoProduto(email, idProduto));
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 	
 		assertEquals("Produto não encontrado.", ex.getMessage());
@@ -490,18 +562,18 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Encerra promocao com Promocao Inexistente, retorna erro")
 	void encerraPromocaoDoProduto_comPromocaoInexistente_retornaErro() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = ProdutoDataHelper.createProduto();
-		String email = cliente.getEmail();
 		UUID idProduto = ProdutoDataHelper.createProduto().getIdProduto();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 
 		APIException ex = assertThrows(APIException.class,
 				() -> produtoApplicationService.encerraPromocaoDoProduto(email, idProduto));
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 	
 		assertEquals("Este Produto não possui promoção.", ex.getMessage());
