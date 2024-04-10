@@ -75,6 +75,22 @@ class ProdutoApplicationServiceTest {
 	}
 	
 	@Test
+	@DisplayName("Cadastra Produto com credencial nao autorizada")
+	void cadastraProduto_comCredencialDeCliente_retornaAcessoNegado() {
+		ProdutoRequest request = ProdutoDataHelper.createProdutorequest();
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialCliente();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		
+		APIException ex = assertThrows(APIException.class, () -> produtoApplicationService.cadastraProduto(credencialUsuario.getUsername(), request));
+
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
+
+		assertEquals("Acesso negado", ex.getMessage());
+		assertEquals(HttpStatus.FORBIDDEN, ex.getStatusException());
+	}
+	
+	@Test
 	@DisplayName("Busca Produto Por Id")
 	void buscaProduto_comIdValido_retornaProdutoDetalhadoResponse() {
 		Produto produto = ProdutoDataHelper.createProduto();
