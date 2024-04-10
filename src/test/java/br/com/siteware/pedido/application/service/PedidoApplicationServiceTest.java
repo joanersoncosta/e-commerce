@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -45,11 +46,13 @@ class PedidoApplicationServiceTest {
 		List<Carrinho> produtos = CarrinhoDataHelper.createListCarrinho();
 		
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(clienteRepository.detalhaClientePorId(any())).thenReturn(Optional.of(cliente));
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(produtos);
 
 		PedidoDetalhadoResponse response = pedidoApplicationService.buscaPedido(email, cliente.getIdCliente());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(clienteRepository, times(1)).detalhaClientePorId(any());
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
 
 		assertThat(produtos).isNotEmpty();
@@ -67,11 +70,13 @@ class PedidoApplicationServiceTest {
 		List<Carrinho> produtos = CarrinhoDataHelper.createListCarrinhoVazio();
 		
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(clienteRepository.detalhaClientePorId(any())).thenReturn(Optional.of(cliente));
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(Collections.emptyList());
 
 		PedidoDetalhadoResponse response = pedidoApplicationService.buscaPedido(email, cliente.getIdCliente());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(clienteRepository, times(1)).detalhaClientePorId(any());
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
 
 		assertThat(produtos).isEmpty();
