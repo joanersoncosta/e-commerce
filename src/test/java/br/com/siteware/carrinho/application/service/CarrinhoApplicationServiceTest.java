@@ -216,22 +216,23 @@ class CarrinhoApplicationServiceTest {
 	@DisplayName("Edita quantidade de Produtos do Carrinho")
 	void editaCarrinho_comDadosValidos_alteraQuandidedeProdutos() {
 		Cliente cliente = ClienteDataHelper.createCliente();
+		Produto produto = ProdutoDataHelper.createProduto();
 		String email = cliente.getEmail();
-		Carrinho carrinhoMock = mock(Carrinho.class);
-		UUID idCarrinho = CarrinhoDataHelper.createCarrinho().getIdCarrinho();
+		Carrinho carrinho = CarrinhoDataHelper.createCarrinho();
+		UUID idCarrinho = carrinho.getIdCarrinho();
 		EditaCarrinhoRequest request = CarrinhoDataHelper.editaCarrinhoRequest();
 
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
-		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.of(carrinhoMock));
-		doNothing().when(carrinhoRepository).atualizaCarrinho(carrinhoMock);
+		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
+		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.of(carrinho));
+		doNothing().when(carrinhoRepository).atualizaCarrinho(carrinho);
 		
 		carrinhoApplicationService.editaCarrinho(email, idCarrinho, request.getQuantidade());
 
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
-		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
-		verify(carrinhoMock, times(1)).pertenceCliente(cliente);
-		verify(carrinhoMock, times(1)).atualizaCarrinho(request.getQuantidade());
-		verify(carrinhoRepository, times(1)).atualizaCarrinho(carrinhoMock);
+		verify(clienteRepository, times(1)).detalhaClientePorEmail(any());
+		verify(produtoRepository, times(1)).detalhaProdutoPorId(any());
+		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(any());
+		verify(carrinhoRepository, times(1)).atualizaCarrinho(carrinho);
 	}
 	
 	@Test
