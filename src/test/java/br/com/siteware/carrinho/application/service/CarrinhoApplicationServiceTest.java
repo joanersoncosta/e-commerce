@@ -126,11 +126,13 @@ class CarrinhoApplicationServiceTest {
 		String email = cliente.getEmail();
 		UUID idCliente = cliente.getIdCliente();
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(clienteRepository.detalhaClientePorId(any())).thenReturn(Optional.of(cliente));
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(Collections.emptyList());
 
 		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email, cliente.getIdCliente());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(clienteRepository, times(1)).detalhaClientePorId(any());
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
 
 		assertThat(response).isEmpty();
