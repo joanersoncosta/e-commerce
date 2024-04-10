@@ -221,16 +221,15 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Deleta Produto Por Id")
 	void deletaProduto_comIdValido_semRetorno() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = ProdutoDataHelper.createProduto();
 		UUID idProduto = produto.getIdProduto();
-		String email = "exemplo@gmail.com";
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
 
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 		doNothing().when(produtoRepository).deletaProduto(produto);
 		
-		produtoApplicationService.deletaProdutoPorId(email, idProduto);
+		produtoApplicationService.deletaProdutoPorId(credencialUsuario.getUsername(), idProduto);
 	
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).deletaProduto(produto);

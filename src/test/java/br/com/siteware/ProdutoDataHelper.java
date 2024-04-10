@@ -19,15 +19,17 @@ public class ProdutoDataHelper {
 	public static final UUID ID_USUARIO_VALIDO = UUID.fromString("8d58875d-2455-4075-8b5d-57c73fcf1241");
 
 	public static Produto createProduto() {
-		return Produto.builder().idProduto(ID_PRODUTO).categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
+		return Produto.builder().idProduto(ID_PRODUTO).emailAssociadoAoAdmin("admin@gmail.com")
+				.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
 				.statusPromocao(PromocaoProdutoStatus.INATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3)
 				.nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0)
 				.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 				.dataModificacaoProduto(LocalDateTime.now()).build();
 	}
-	
+
 	public static Produto adicionarProdutoAoCarrinho() {
-		return Produto.builder().idProduto(ID_PRODUTO).categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
+		return Produto.builder().idProduto(ID_PRODUTO).emailAssociadoAoAdmin("admin@gmail.com")
+				.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
 				.statusPromocao(PromocaoProdutoStatus.INATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3)
 				.nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0)
 				.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
@@ -39,105 +41,112 @@ public class ProdutoDataHelper {
 	}
 
 	public static List<Produto> createListProduto() {
-		return List.of(Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-				.promocao(PromocaoProduto.NENHUM).statusPromocao(PromocaoProdutoStatus.INATIVO)
-				.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 1")
-				.descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0).precoOriginal(704.45)
-				.dataCadastroProduto(LocalDateTime.now()).dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.IMOVEL)
-						.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 2")
-						.descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+		return List.of(
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
+						.statusPromocao(PromocaoProdutoStatus.INATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-						.promocao(PromocaoProduto.NENHUM).statusPromocao(PromocaoProdutoStatus.INATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 3")
-						.descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.IMOVEL).promocao(PromocaoProduto.PROMOCAO)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 2").descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.COSMETICO)
-						.promocao(PromocaoProduto.LEVE_2_PAGUE_1).statusPromocao(PromocaoProdutoStatus.ATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 4")
-						.descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
+						.statusPromocao(PromocaoProdutoStatus.INATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 3").descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.COSMETICO).promocao(PromocaoProduto.LEVE_2_PAGUE_1)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 4").descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build());
 	}
 
 	public static List<Produto> createListProdutoCategoria() {
-		return List.of(Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-				.promocao(PromocaoProduto.NENHUM).statusPromocao(PromocaoProdutoStatus.INATIVO)
-				.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 1")
-				.descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0).precoOriginal(704.45)
-				.dataCadastroProduto(LocalDateTime.now()).dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-						.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 2")
-						.descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+		return List.of(
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
+						.statusPromocao(PromocaoProdutoStatus.INATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-						.promocao(PromocaoProduto.NENHUM).statusPromocao(PromocaoProdutoStatus.INATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 3")
-						.descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.PROMOCAO)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 2").descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-						.promocao(PromocaoProduto.LEVE_2_PAGUE_1).statusPromocao(PromocaoProdutoStatus.ATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 4")
-						.descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.NENHUM)
+						.statusPromocao(PromocaoProdutoStatus.INATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 3").descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.LEVE_2_PAGUE_1)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 4").descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build());
 	}
-	
+
 	public static EditaProdutoRequest editaProdutoRequest() {
 		return new EditaProdutoRequest("Produto request", "Exemplo request", 782.25);
 	}
-	
+
 	public static AlteraPromocaoProdutoRequest alteraPromocaoProdutoRequest() {
 		return new AlteraPromocaoProdutoRequest(2);
 	}
-	
+
 	public static AlteraPromocaoProdutoRequest alteraPromocaoProdutoRequestComPromocaoInvalida() {
 		return new AlteraPromocaoProdutoRequest(25);
 	}
-	
+
 	public static List<Produto> createListProdutoComPromocao() {
-		return List.of(Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-				.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)
-				.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 1")
-				.descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0).precoOriginal(704.45)
-				.dataCadastroProduto(LocalDateTime.now()).dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.IMOVEL)
-						.promocao(PromocaoProduto.PROMOCAO).statusPromocao(PromocaoProdutoStatus.ATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 2")
-						.descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+		return List.of(
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.PROMOCAO)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.ELETRONICO)
-						.promocao(PromocaoProduto.LEVE_3_PAGUE_10_REAIS).statusPromocao(PromocaoProdutoStatus.ATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 3")
-						.descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.IMOVEL).promocao(PromocaoProduto.PROMOCAO)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 2").descricao("Exemplo Produto 2").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build(),
-				Produto.builder().idProduto(UUID.randomUUID()).categoria(Categoria.COSMETICO)
-						.promocao(PromocaoProduto.LEVE_2_PAGUE_1).statusPromocao(PromocaoProdutoStatus.ATIVO)
-						.statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3).nome("Produto 4")
-						.descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0).desconto(0)
-						.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.LEVE_3_PAGUE_10_REAIS)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 3").descricao("Exemplo Produto 3").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
+						.dataModificacaoProduto(LocalDateTime.now()).build(),
+				Produto.builder().idProduto(UUID.randomUUID()).emailAssociadoAoAdmin("admin@gmail.com")
+						.categoria(Categoria.COSMETICO).promocao(PromocaoProduto.LEVE_2_PAGUE_1)
+						.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL)
+						.estoque(3).nome("Produto 4").descricao("Exemplo Produto 4").preco(704.45).produtosVendidos(0)
+						.desconto(0).precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 						.dataModificacaoProduto(LocalDateTime.now()).build());
 	}
-	
+
 	public static PromocaoProdutoRequest promocaoProdutoRequest() {
 		return new PromocaoProdutoRequest(50);
 	}
 
 	public static Produto createProdutoComPromocao() {
-		return Produto.builder().idProduto(ID_PRODUTO).categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.PROMOCAO)
+		return Produto.builder().idProduto(ID_PRODUTO).emailAssociadoAoAdmin("admin@gmail.com")
+				.categoria(Categoria.ELETRONICO).promocao(PromocaoProduto.PROMOCAO)
 				.statusPromocao(PromocaoProdutoStatus.ATIVO).statusEstoque(EstoqueProdutoStatus.DISPONIVEL).estoque(3)
 				.nome("Produto 1").descricao("Exemplo Produto 1").preco(704.45).produtosVendidos(0).desconto(0)
 				.precoOriginal(704.45).dataCadastroProduto(LocalDateTime.now())
 				.dataModificacaoProduto(LocalDateTime.now()).build();
 	}
-	
+
 }
