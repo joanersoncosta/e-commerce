@@ -1,0 +1,888 @@
+{
+	"info": {
+		"_postman_id": "8468444f-60e6-4f82-a985-e57c1f485564",
+		"name": "Siteware-produto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25179630",
+		"_collection_link": "https://www.postman.com/blue-moon-159961/workspace/bootcamp-api-petz/collection/25179630-8468444f-60e6-4f82-a985-e57c1f485564?action=share&source=collection_link&creator=25179630"
+	},
+	"item": [
+		{
+			"name": "ADMIN",
+			"item": [
+				{
+					"name": "Cria Credencial Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"senha\": \"123admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/private/admin/cadastro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"private",
+								"admin",
+								"cadastro"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "postCliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Aurora Costa\",\r\n    \"email\": \"Aurora@gmail.com\",\r\n    \"senha\":\"123456\",\r\n    \"sexo\":\"FEMININO\",\r\n    \"dataNascimento\":\"2012-12-12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/cliente/public/cadastro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"cliente",
+								"public",
+								"cadastro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos os Clientes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/cliente/admin/busca-clientes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"cliente",
+								"admin",
+								"busca-clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca Cliente por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/cliente/public/{{idCliente}}/busca-cliente",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"cliente",
+								"public",
+								"{{idCliente}}",
+								"busca-cliente"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Altera Cliente por Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\":\"\",\r\n    \"telefone\":\"\",\r\n    \"sexo\":\"\",\r\n    \"dataNascimento\":\"2023-05-12\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/cliente/{{idCliente}}/altera-dados-cliente",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"cliente",
+								"{{idCliente}}",
+								"altera-dados-cliente"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categoria",
+			"item": [
+				{
+					"name": "Listar Todos os Produtos Por Categoria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/busca-produtos-por-categoria?categoria=PAPELARIA",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"busca-produtos-por-categoria"
+							],
+							"query": [
+								{
+									"key": "categoria",
+									"value": "PAPELARIA"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedido",
+			"item": [
+				{
+					"name": "Busca Pedido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/pedido/cliente/{{idCliente}}/detalha",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"pedido",
+								"cliente",
+								"{{idCliente}}",
+								"detalha"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Autentica",
+			"item": [
+				{
+					"name": "Autentica Cliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cliente\": \"admin@gmail.com\",\r\n    \"senha\": \"123admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/public/v1/autenticacao",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"public",
+								"v1",
+								"autenticacao"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Adiciona Produto ao carrinho",
+			"item": [
+				{
+					"name": "Adiciona produto ao carrinho",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idProduto\":\"837e2813-a3ed-4af9-9c52-192882e2bcb4\",\r\n    \"quantidade\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/carrinho/adiciona",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"carrinho",
+								"adiciona"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Produtos do Carrinho",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/carrinho//cliente/{{idCliente}}/busca-produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"carrinho",
+								"",
+								"cliente",
+								"{{idCliente}}",
+								"busca-produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "alterar quantidade Pedidos por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/carrinho/{{idCarrinho}}/edita?quantidade=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"carrinho",
+								"{{idCarrinho}}",
+								"edita"
+							],
+							"query": [
+								{
+									"key": "quantidade",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Produto Por do Carrinho",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/carrinho/{{idCarrinho}}/remove",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"carrinho",
+								"{{idCarrinho}}",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "Cadastrar Produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoria\":\"PAPELARIA\",\r\n    \"promocao\":3,\r\n    \"estoque\":3,\r\n    \"nome\": \"Cadeira\",\r\n    \"descricao\": \"otima para se reuniao com a familia.\",\r\n    \"preco\": 885.68\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/admin/cadastra",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"admin",
+								"cadastra"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos os Produtos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/public/busca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"public",
+								"busca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos os Produtos com Promocao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/public/busca/promocao",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"public",
+								"busca",
+								"promocao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos os Produtos Por Nome",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/public/busca/nome?nome=a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"public",
+								"busca",
+								"nome"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca Produto Por por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/public/{{idProduto}}/busca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"public",
+								"{{idProduto}}",
+								"busca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Inicia Promocao do Produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/admin/{{idProduto}}/promocao/inicia",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"admin",
+								"{{idProduto}}",
+								"promocao",
+								"inicia"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Encerra Promocao do Produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/admin/{{idProduto}}/promocao/encerra",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"admin",
+								"{{idProduto}}",
+								"promocao",
+								"encerra"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleta Produto Por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/admin/{{idProduto}}/deleta",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"admin",
+								"{{idProduto}}",
+								"deleta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Altera Produto por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Cadeira para acampamento\",\r\n    \"descricao\": \"Muito confortavel para sua familia\",\r\n    \"preco\": \"120.45\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/admin/{{idProduto}}/edita",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"admin",
+								"{{idProduto}}",
+								"edita"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Altera Promocao do Produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"promocao\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/siteware/api/v1/produto/admin/{{idProduto}}/promocao/altera",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"siteware",
+								"api",
+								"v1",
+								"produto",
+								"admin",
+								"{{idProduto}}",
+								"promocao",
+								"altera"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teste Home Api",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/siteware/api/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"siteware",
+						"api",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
