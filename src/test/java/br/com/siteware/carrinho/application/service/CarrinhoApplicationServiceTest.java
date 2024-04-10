@@ -103,12 +103,15 @@ class CarrinhoApplicationServiceTest {
 		String email = cliente.getEmail();
 		UUID idCliente = cliente.getIdCliente();
 		List<Carrinho> produtos = CarrinhoDataHelper.createListCarrinho();
+
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		when(clienteRepository.detalhaClientePorId(any())).thenReturn(Optional.of(cliente));
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(produtos);
 
-		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email, cliente.getIdCliente());
+		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email, idCliente);
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(clienteRepository, times(1)).detalhaClientePorId(any());
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
 
 		assertThat(response).isNotEmpty();
