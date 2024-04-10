@@ -24,10 +24,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import br.com.siteware.ClienteDataHelper;
+import br.com.siteware.CredencialDataHelpher;
 import br.com.siteware.ProdutoDataHelper;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.credencial.application.service.CredencialService;
+import br.com.siteware.credencial.domain.Credencial;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.AlteraPromocaoProdutoRequest;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
@@ -50,21 +53,21 @@ class ProdutoApplicationServiceTest {
 	private ProdutoRepository produtoRepository;
 	@Mock
 	private ClienteRepository clienteRepository;
-
+	@Mock
+	private CredencialService credencialService;
+	
 	@Test
 	@DisplayName("Cadastra Produto com sucesso")
 	void cadastraProduto_comDadosValidos_retornaProdutoIdResponse() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		ProdutoRequest request = ProdutoDataHelper.createProdutorequest();
-		String email = cliente.getEmail();
-		String emailAdmin = "admin@gmail.com";
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		when(produtoRepository.salva(any())).thenReturn(new Produto(credencialUsuario.getUsername(), request));
 		
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
-		when(produtoRepository.salva(any())).thenReturn(new Produto(emailAdmin, request));
-		
-		ProdutoIdResponse response = produtoApplicationService.cadastraProduto(email, request);
+		ProdutoIdResponse response = produtoApplicationService.cadastraProduto(credencialUsuario.getUsername(), request);
 	
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).salva(any());
 
 		assertThat(response).isNotNull();
@@ -236,7 +239,6 @@ class ProdutoApplicationServiceTest {
 		assertEquals("Produto não encontrado.", ex.getMessage());
 		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
 	}
-	
 	
 	@Test
 	@DisplayName("Edita Produto")
