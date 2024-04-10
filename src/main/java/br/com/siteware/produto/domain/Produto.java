@@ -3,6 +3,11 @@ package br.com.siteware.produto.domain;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.http.HttpStatus;
@@ -12,9 +17,6 @@ import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.ProdutoRequest;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 import br.com.siteware.produto.domain.enuns.PromocaoProdutoStatus;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +32,8 @@ public class Produto {
 
 	@MongoId
 	private UUID idProduto;
+	@Indexed
+	private String emailAssociadoAoAdmin;
 	@NotNull
 	private Categoria categoria;
 	@NotNull
@@ -53,8 +57,9 @@ public class Produto {
 	private LocalDateTime dataCadastroProduto;
 	private LocalDateTime dataModificacaoProduto;
 
-	public Produto(ProdutoRequest produtoRequest) {
+	public Produto(String emailAssociadoAoAdmin, ProdutoRequest produtoRequest) {
 		this.idProduto = UUID.randomUUID();
+		this.emailAssociadoAoAdmin = emailAssociadoAoAdmin;
 		this.categoria = retornaCategoria(produtoRequest.getCategoria());
 		this.promocao = retornaPromocao(produtoRequest.getPromocao());
 		this.statusPromocao = statusPromocao(promocao);
@@ -84,12 +89,23 @@ public class Produto {
 	}
 
 	public void alteraStatusPromocao(PromocaoProduto promocao) {
-		if(promocao == PromocaoProduto.NENHUM){this.statusPromocao = PromocaoProdutoStatus.INATIVO;}
-		else {this.statusPromocao = PromocaoProdutoStatus.ATIVO;}
+		if (promocao == PromocaoProduto.NENHUM) {
+			this.statusPromocao = PromocaoProdutoStatus.INATIVO;
+		} else {
+			this.statusPromocao = PromocaoProdutoStatus.ATIVO;
+		}
 	}
-	
+
 	public void incrementaProdutosVendidos(Integer quantidade) {
 		this.produtosVendidos += quantidade;
+	}
+
+	public void atualizaProdutosVendidos(Integer quantidadeAtual, Integer novaQuantidade) {
+		this.produtosVendidos = retornaQuantidade(quantidadeAtual) + novaQuantidade;
+	}
+
+	public Integer retornaQuantidade(Integer quantidadeAtual) {
+		return Math.abs(this.produtosVendidos - quantidadeAtual);
 	}
 	
 	public void reduzProdutosVendidos(Integer quantidade) {
@@ -102,17 +118,30 @@ public class Produto {
 		}
 	}
 
+	public void validaProdutosVendidosDOEstoque(Integer quantidade, Integer novaQuantidade) {
+		Integer ValidaQuantidade = retornaQuantidade(quantidade) + novaQuantidade;
+		if (estoque < ValidaQuantidade) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Não possuimos esta quantidade em estoque.");
+		}
+	}
+
 	public void validaStatusEstoque() {
-		if(this.estoque.equals(produtosVendidos)) {
+		if (this.estoque.equals(produtosVendidos)) {
 			this.statusEstoque = EstoqueProdutoStatus.INDISPONIVEL;
 		}
 	}
 
 	public void validaPromocao() {
-		if(!this.promocao.equals(PromocaoProduto.PROMOCAO)) {
+		if (!this.promocao.equals(PromocaoProduto.PROMOCAO)) {
 			throw APIException.build(HttpStatus.BAD_REQUEST, "Este Produto não possui promoção.");
 		}
-		
+
+	}
+
+	public void pertenceAoUsuario(String username) {
+		if(!this.emailAssociadoAoAdmin.equals(username)) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é o dono do produto.");
+		}
 	}
 
 }

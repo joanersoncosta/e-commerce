@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
-import br.com.siteware.produto.application.api.PromocaoProdutoRequest;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 
@@ -28,7 +27,7 @@ public interface ProdutoRepository {
 
 	List<Produto> buscaProdutoComPromocao();
 
-	void aplicaPromocaoAoProduto(Produto produto, PromocaoProdutoRequest promocaoRequest);
+	void aplicaPromocaoAoProduto(Produto produto, Integer percentualDesconto);
 
 	void encerraPromocaoDoProduto(Produto produto);
 

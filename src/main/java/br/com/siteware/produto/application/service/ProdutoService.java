@@ -9,8 +9,6 @@ import br.com.siteware.produto.application.api.ProdutoDetalhadoResponse;
 import br.com.siteware.produto.application.api.ProdutoIdResponse;
 import br.com.siteware.produto.application.api.ProdutoListResponse;
 import br.com.siteware.produto.application.api.ProdutoRequest;
-import br.com.siteware.produto.application.api.PromocaoProdutoRequest;
-import jakarta.validation.Valid;
 
 public interface ProdutoService {
 
@@ -32,7 +30,7 @@ public interface ProdutoService {
 
 	List<ProdutoListResponse> buscaProdutoComPromocao();
 
-	void aplicaPromocaoAoProduto(String email, UUID idProduto, PromocaoProdutoRequest promocaoRequest);
+	void aplicaPromocaoAoProduto(String email, UUID idProduto, Integer percentualDesconto);
 
 	void encerraPromocaoDoProduto(String email, UUID idProduto);
 

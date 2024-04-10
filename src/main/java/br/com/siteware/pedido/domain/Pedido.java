@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,8 +16,6 @@ import br.com.siteware.carrinho.domain.Carrinho;
 import br.com.siteware.cliente.application.api.ClienteDetalhadoResponse;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.pedido.domain.enuns.PedidoStatus;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

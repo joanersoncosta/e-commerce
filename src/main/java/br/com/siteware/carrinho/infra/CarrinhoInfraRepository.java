@@ -8,10 +8,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
+import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.domain.EstoqueProdutoStatus;
 import br.com.siteware.produto.domain.Produto;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,11 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 	@Override
 	public Carrinho salva(Carrinho carrinho) {
 		log.info("[start] CarrinhoInfraRepository - salva");
-		carrinhoSpringMongoDbRepository.save(carrinho);
+		try {
+			carrinhoSpringMongoDbRepository.save(carrinho);
+		}catch(APIException e) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Erro ao adicionar o Produto ao carrinho.", e);
+		}
 		log.info("[finish] CarrinhoInfraRepository - salva");
 		return carrinho;
 	}
@@ -62,7 +68,11 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 	@Override
 	public void atualizaCarrinho(Carrinho carrinho) {
 		log.info("[start] CarrinhoInfraRepository - removeCarrinho");
-		carrinhoSpringMongoDbRepository.save(carrinho);
+		try {
+			carrinhoSpringMongoDbRepository.save(carrinho);
+		}catch(APIException e) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Erro ao atualizar Produto do carrinho.", e);
+		}
 		log.info("[finish] CarrinhoInfraRepository - removeCarrinho");
 	}
 

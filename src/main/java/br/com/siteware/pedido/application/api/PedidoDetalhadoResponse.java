@@ -3,8 +3,9 @@ package br.com.siteware.pedido.application.api;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.Digits;
+
 import br.com.siteware.carrinho.domain.Carrinho;
-import jakarta.validation.constraints.Digits;
 import lombok.Builder;
 import lombok.Getter;
 

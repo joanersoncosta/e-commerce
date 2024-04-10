@@ -106,7 +106,7 @@ class CarrinhoApplicationServiceTest {
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(produtos);
 
-		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email);
+		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email, cliente.getIdCliente());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
@@ -125,7 +125,7 @@ class CarrinhoApplicationServiceTest {
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(carrinhoRepository.listaCarrinhoDoCliente(any())).thenReturn(Collections.emptyList());
 
-		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email);
+		List<CarrinhoListResponse> response = carrinhoApplicationService.listaCarrinhoDoCliente(email, cliente.getIdCliente());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(carrinhoRepository, times(1)).listaCarrinhoDoCliente(idCliente);
@@ -222,12 +222,12 @@ class CarrinhoApplicationServiceTest {
 		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.of(carrinhoMock));
 		doNothing().when(carrinhoRepository).atualizaCarrinho(carrinhoMock);
 		
-		carrinhoApplicationService.editaCarrinho(email, idCarrinho, request);
+		carrinhoApplicationService.editaCarrinho(email, idCarrinho, request.getQuantidade());
 
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);
 		verify(carrinhoMock, times(1)).pertenceCliente(cliente);
-		verify(carrinhoMock, times(1)).atualizaCarrinho(request);
+		verify(carrinhoMock, times(1)).atualizaCarrinho(request.getQuantidade());
 		verify(carrinhoRepository, times(1)).atualizaCarrinho(carrinhoMock);
 	}
 	
@@ -243,7 +243,7 @@ class CarrinhoApplicationServiceTest {
 		when(carrinhoRepository.buscaCarrinhoPorId(any())).thenReturn(Optional.empty());
 		
 		APIException ex = assertThrows(APIException.class, 
-				() -> carrinhoApplicationService.editaCarrinho(email, idCarrinho, request));
+				() -> carrinhoApplicationService.editaCarrinho(email, idCarrinho, request.getQuantidade()));
 		
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(carrinhoRepository, times(1)).buscaCarrinhoPorId(idCarrinho);

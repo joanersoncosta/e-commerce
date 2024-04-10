@@ -3,6 +3,9 @@ package br.com.siteware.produto.application.api;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+import javax.websocket.server.PathParam;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,60 +13,58 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
-
 @RestController
 @RequestMapping("/v1/produto")
 public interface ProdutoAPI {
 
-	@PostMapping(path = "/cadastra")
+	@PostMapping(path = "/admin/cadastra")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	ProdutoIdResponse cadastraProduto(@PathParam(value = "email") String email, @RequestBody @Valid ProdutoRequest produtoRequest);
+	ProdutoIdResponse cadastraProduto(@RequestHeader(name = "Authorization", required = true) String token, @RequestBody @Valid ProdutoRequest produtoRequest);
 
-	@GetMapping(path = "/{idProduto}/busca")
+	@GetMapping(path = "/public/{idProduto}/busca")
 	@ResponseStatus(value = HttpStatus.OK)
-	ProdutoDetalhadoResponse buscaProdutoPorId(@PathVariable(value = "idProduto") UUID idProduto);
+	ProdutoDetalhadoResponse buscaProdutoPorId(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto);
 
-	@GetMapping(path = "/busca-produtos")
+	@GetMapping(path = "/public/busca")
 	@ResponseStatus(value = HttpStatus.OK)
-	List<ProdutoListResponse> buscaTodosOsProdutos();
+	List<ProdutoListResponse> buscaTodosOsProdutos(@RequestHeader(name = "Authorization", required = true) String token);
 
-	@GetMapping(path = "/busca-produtos-por-categoria")
+	@GetMapping(path = "/public/busca/categoria")
 	@ResponseStatus(value = HttpStatus.OK)
-	List<ProdutoListResponse> buscaProdutosPorCategoria(@PathParam(value = "categoria") String categoria);
+	List<ProdutoListResponse> buscaProdutosPorCategoria(@RequestHeader(name = "Authorization", required = true) String token, @PathParam(value = "categoria") String categoria);
 
-	@GetMapping(path = "/busca-produtos-por-nome")
+	@GetMapping(path = "/public/busca/nome")
 	@ResponseStatus(value = HttpStatus.OK)
-	List<ProdutoListResponse> buscaProdutosPorNome(@RequestParam(name = "nome") String nomeProduto);
+	List<ProdutoListResponse> buscaProdutosPorNome(@RequestHeader(name = "Authorization", required = true) String token, @RequestParam(name = "nome") String nomeProduto);
 
-	@DeleteMapping(path = "/{idProduto}/deleta")
+	@DeleteMapping(path = "/admin/{idProduto}/deleta")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void deletaProdutoPorId(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto);
+	void deletaProdutoPorId(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto);
 
-	@PatchMapping(path = "/{idProduto}/edita")
+	@PatchMapping(path = "/admin/{idProduto}/edita")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void editaProdutoPorId(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid EditaProdutoRequest editaProduto);
+	void editaProdutoPorId(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid EditaProdutoRequest editaProduto);
 
-	@PatchMapping(path = "/{idProduto}/altera-promocao")
+	@PatchMapping(path = "/admin/{idProduto}/promocao/altera")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void alteraPromocaoDoProdutoPorId(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid AlteraPromocaoProdutoRequest editaPromocaoProduto);
+	void alteraPromocaoDoProdutoPorId(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid AlteraPromocaoProdutoRequest editaPromocaoProduto);
 
-	@GetMapping(path = "/busca-produtos-promocao")
+	@GetMapping(path = "/public/busca/promocao")
 	@ResponseStatus(value = HttpStatus.OK)
-	List<ProdutoListResponse> buscaProdutoComPromocao();
+	List<ProdutoListResponse> buscaProdutoComPromocao(@RequestHeader(name = "Authorization", required = true) String token);
 
-	@PatchMapping(path = "/{idProduto}/promocao/inicia")
+	@PatchMapping(path = "/admin/{idProduto}/promocao/inicia")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void aplicaPromocaoAoProduto(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto, @RequestBody @Valid PromocaoProdutoRequest promocaoRequest);
+	void aplicaPromocaoAoProduto(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto, @PathParam(value = "percentualDesconto") Integer percentualDesconto);
 
-	@PatchMapping(path = "/{idProduto}/promocao/encerra")
+	@PatchMapping(path = "/admin/{idProduto}/promocao/encerra")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void encerraPromocaoDoProduto(@PathParam(value = "email") String email, @PathVariable(value = "idProduto") UUID idProduto);
+	void encerraPromocaoDoProduto(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable(value = "idProduto") UUID idProduto);
 
 }

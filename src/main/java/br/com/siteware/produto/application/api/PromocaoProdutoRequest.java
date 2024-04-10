@@ -1,11 +1,16 @@
 package br.com.siteware.produto.application.api;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
-public class PromocaoProdutoRequest {
+public class PromocaoProdutoRequest{
+	@NotNull
 	private Integer percentualDesconto;
+
+	public PromocaoProdutoRequest(Integer percentualDesconto) {
+		this.percentualDesconto = percentualDesconto;
+	}
+	
 }

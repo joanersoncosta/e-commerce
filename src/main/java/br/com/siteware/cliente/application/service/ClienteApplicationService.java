@@ -12,6 +12,9 @@ import br.com.siteware.cliente.application.api.ClienteListResponse;
 import br.com.siteware.cliente.application.api.ClienteNovoRequest;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
+import br.com.siteware.credencial.application.service.CredencialService;
+import br.com.siteware.credencial.domain.Credencial;
+import br.com.siteware.credencial.domain.CredencialCliente;
 import br.com.siteware.handler.APIException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,11 +24,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ClienteApplicationService implements ClienteService {
 	private final ClienteRepository clienteRepository;
+	private final CredencialService credencialService;
 
 	@Override
 	public ClienteIdResponse criaNovoCliente(ClienteNovoRequest clienteRequest) {
 		log.info("[inicia] ClienteApplicationService - criaNovoCliente");
 		Cliente cliente = clienteRepository.salva(new Cliente(clienteRequest));
+		credencialService.criaNovaCredencial(new CredencialCliente(clienteRequest));
 		log.info("[finaliza] ClienteApplicationService - criaNovoCliente");
 		return ClienteIdResponse.builder().idCliente(cliente.getIdCliente()).build();
 	}
@@ -38,7 +43,6 @@ public class ClienteApplicationService implements ClienteService {
 		log.info("[idCliente] {}", idCliente);
 		Cliente cliente = clienteRepository.detalhaClientePorId(idCliente)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
-		cliente.pertenceAoCliente(emailCliente);
 		log.info("[finaliza] ClienteApplicationService - buscaClientePorId");
 		return ClienteDetalhadoResponse.converteClienteParaResponse(cliente);
 	}
@@ -65,7 +69,8 @@ public class ClienteApplicationService implements ClienteService {
 	@Override
 	public List<ClienteListResponse> buscaTodosOsClientes(String email) {
 		log.info("[inicia] ClienteApplicationService - buscaTodosOsClientes");
-		clienteRepository.detalhaClientePorEmail(email);
+		Credencial credencialUsuario = credencialService.buscaCredencialPorUsuario(email);
+//		credencialUsuario.validaAdmin();
 		List<Cliente> clientes = clienteRepository.buscaClientes();		
 		log.info("[finaliza] ClienteApplicationService - buscaTodosOsClientes");
 		return ClienteListResponse.converte(clientes);

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import br.com.siteware.categoria.domain.Categoria;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.api.EditaProdutoRequest;
-import br.com.siteware.produto.application.api.PromocaoProdutoRequest;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
@@ -117,16 +116,16 @@ public class ProdutoInfraRepository implements ProdutoRepository {
 	}
 
 	@Override
-	public void aplicaPromocaoAoProduto(Produto produto, PromocaoProdutoRequest promocaoRequest) {
+	public void aplicaPromocaoAoProduto(Produto produto, Integer percentualDesconto) {
 		log.info("[start] ProdutoInfraRepository - alteraPromocaoDoProduto");
 		Query query = new Query();
 		query.addCriteria(Criteria.where("idProduto").is(produto.getIdProduto()));
 		
 		Update update = new Update();
-		update.set("desconto", promocaoRequest.getPercentualDesconto());
+		update.set("desconto", percentualDesconto);
 		update.set("promocao", PromocaoProduto.PROMOCAO);
 		update.set("statusPromocao", PromocaoProdutoStatus.ATIVO);
-	    update.multiply("preco", (1.0 - (promocaoRequest.getPercentualDesconto() / 100.0)));
+	    update.multiply("preco", (1 - (percentualDesconto / 100.0)));
 	    
 		mongoTemplate.updateFirst(query, update, Produto.class);
 		log.info("[finish] ProdutoInfraRepository - alteraPromocaoDoProduto");

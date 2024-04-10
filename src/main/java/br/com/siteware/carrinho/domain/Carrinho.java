@@ -2,17 +2,17 @@ package br.com.siteware.carrinho.domain;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
 
-import br.com.siteware.carrinho.application.api.EditaCarrinhoRequest;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.domain.Produto;
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -75,10 +75,16 @@ public class Carrinho {
 		}
 	}
 
-	public void atualizaCarrinho(EditaCarrinhoRequest carrinhoRequest) {
-		validaQuantidade(carrinhoRequest.getQuantidade());
-		this.quantidade = carrinhoRequest.getQuantidade();
+	public void atualizaCarrinho(Integer quantidade) {
+		validaQuantidade(quantidade);
+		this.quantidade = quantidade;
 	    this.subTotal = calculaSubTotal();
+	}
+
+	public Integer retornaDiferenca(Integer novaQuantidade) {
+		int diferenca = novaQuantidade - this.quantidade;
+		if (diferenca < 0) {diferenca += Math.abs(diferenca);}
+		return diferenca;
 	}
 	
 }

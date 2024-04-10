@@ -2,7 +2,8 @@ package br.com.siteware.carrinho.application.api;
 
 import java.util.UUID;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

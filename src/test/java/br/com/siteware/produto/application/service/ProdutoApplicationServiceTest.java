@@ -57,9 +57,10 @@ class ProdutoApplicationServiceTest {
 		Cliente cliente = ClienteDataHelper.createCliente();
 		ProdutoRequest request = ProdutoDataHelper.createProdutorequest();
 		String email = cliente.getEmail();
+		String emailAdmin = "admin@gmail.com";
 		
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
-		when(produtoRepository.salva(any())).thenReturn(new Produto(request));
+		when(produtoRepository.salva(any())).thenReturn(new Produto(emailAdmin, request));
 		
 		ProdutoIdResponse response = produtoApplicationService.cadastraProduto(email, request);
 	
@@ -377,15 +378,15 @@ class ProdutoApplicationServiceTest {
 
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
-		doNothing().when(produtoRepository).aplicaPromocaoAoProduto(produto, request);
+		doNothing().when(produtoRepository).aplicaPromocaoAoProduto(produto, request.getPercentualDesconto());
 
 		Produto response = ProdutoDataHelper.createProdutoComPromocao();
 
-		produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request);
+		produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request.getPercentualDesconto());
 	
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
-		verify(produtoRepository, times(1)).aplicaPromocaoAoProduto(produto, request);
+		verify(produtoRepository, times(1)).aplicaPromocaoAoProduto(produto, request.getPercentualDesconto());
 	
 		assertEquals(PromocaoProdutoStatus.ATIVO, response.getStatusPromocao());
 	}
@@ -402,7 +403,7 @@ class ProdutoApplicationServiceTest {
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.empty());
 
 		APIException ex = assertThrows(APIException.class,
-				() -> produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request));
+				() -> produtoApplicationService.aplicaPromocaoAoProduto(email, idProduto, request.getPercentualDesconto()));
 
 		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
