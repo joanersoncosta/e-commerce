@@ -3,6 +3,7 @@ package br.com.siteware.cliente.application.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import br.com.siteware.ClienteDataHelper;
 import br.com.siteware.CredencialDataHelpher;
@@ -29,6 +31,7 @@ import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.credencial.application.service.CredencialService;
 import br.com.siteware.credencial.domain.Credencial;
+import br.com.siteware.handler.APIException;
 
 @ExtendWith(MockitoExtension.class)
 class ClienteApplicationServiceTest{
@@ -108,5 +111,21 @@ class ClienteApplicationServiceTest{
 		
 		assertThat(response).isNotEmpty();
 		assertEquals(4, response.size());
+	}
+	
+	@Test
+	@DisplayName("Encerra Promocao Do Produto com credencial nao autorizada")
+	void encerraPromocaoDoProduto_comCredencialDeCliente_retornaAcessoNegado() {
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialCliente();
+		String email = credencialUsuario.getUsername();
+
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
+		
+		APIException ex = assertThrows(APIException.class, () -> clienteApplicationService.buscaTodosOsClientes(email));
+
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
+
+		assertEquals("Acesso negado", ex.getMessage());
+		assertEquals(HttpStatus.FORBIDDEN, ex.getStatusException());
 	}
 }
