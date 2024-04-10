@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.siteware</groupId>
-	<artifactId>siteware-e-commerce</artifactId>
+	<artifactId>e-commerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>siteware-e-commerce</name>
 	<description> API Rest de gerenciamento de Loja Virtual para produtos diversos </description>
