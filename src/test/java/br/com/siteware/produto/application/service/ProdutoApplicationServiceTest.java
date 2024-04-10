@@ -275,18 +275,18 @@ class ProdutoApplicationServiceTest {
 	@Test
 	@DisplayName("Edita Produto")
 	void editaProduto_comDadosValidos_alteraProduto() {
-		Cliente cliente = ClienteDataHelper.createCliente();
 		Produto produto = ProdutoDataHelper.createProduto();
 		EditaProdutoRequest request = ProdutoDataHelper.editaProdutoRequest();
-		String email = cliente.getEmail();
 		UUID idProduto = produto.getIdProduto();
-
-		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
+		Credencial credencialUsuario = CredencialDataHelpher.createCredencialAdmin();
+		String email = credencialUsuario.getUsername();
+		
+		when(credencialService.buscaCredencialPorUsuario(any())).thenReturn(credencialUsuario);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produto));
 
 		produtoApplicationService.editaProdutoPorId(email, idProduto, request);
 	
-		verify(clienteRepository, times(1)).detalhaClientePorEmail(email);
+		verify(credencialService, times(1)).buscaCredencialPorUsuario(any());
 		verify(produtoRepository, times(1)).detalhaProdutoPorId(idProduto);
 		verify(produtoRepository, times(1)).editaProduto(produto, request);
 	}
