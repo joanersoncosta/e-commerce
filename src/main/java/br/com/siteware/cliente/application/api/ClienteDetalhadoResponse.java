@@ -23,7 +23,7 @@ public class ClienteDetalhadoResponse {
 	private String email;
 	@Schema(description = "Este é o sexo do cliente", example = "FEMININO")
 	private Sexo sexo;
-	@Schema(description = "Esta é a data de nascimento do cliente", example = "12/05/1996")
+	@Schema(description = "Esta é a data de nascimento do cliente", example = "1996-12-05")	
 	private LocalDate dataNascimento;
 	
 	private ClienteDetalhadoResponse(Cliente cliente) {
