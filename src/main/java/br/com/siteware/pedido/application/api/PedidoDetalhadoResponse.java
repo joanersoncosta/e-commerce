@@ -6,14 +6,17 @@ import java.util.UUID;
 import javax.validation.constraints.Digits;
 
 import br.com.siteware.carrinho.domain.Carrinho;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
 public class PedidoDetalhadoResponse {
+	@Schema(description = "Este é o ID do Cliente")
 	private UUID idCliente;
 	@Digits(integer=5, fraction=2)
+	@Schema(description = "Este é o total Pedido", example = "20.45")
 	private Double total;
 	
 	private PedidoDetalhadoResponse(UUID idCliente, Double total) {
