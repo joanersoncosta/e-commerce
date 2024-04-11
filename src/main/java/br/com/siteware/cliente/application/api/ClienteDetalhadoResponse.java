@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.cliente.domain.enuns.Sexo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,11 +15,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 public class ClienteDetalhadoResponse {
+	@Schema(description = "Este é o ID do Cliente")
 	private UUID idCliente;
+	@Schema(description = "Este é o nome do cliente", example = "Maria dos Santos")
 	private String nome;
+	@Schema(description = "Este é o E-mail do cliente", example = "maria@gmail.com")
 	private String email;
-	private String telefone;
+	@Schema(description = "Este é o sexo do cliente", example = "FEMININO")
 	private Sexo sexo;
+	@Schema(description = "Esta é a data de nascimento do cliente", example = "12/05/1996")
 	private LocalDate dataNascimento;
 	
 	private ClienteDetalhadoResponse(Cliente cliente) {
