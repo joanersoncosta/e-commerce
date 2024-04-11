@@ -294,7 +294,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cliente\": \"admin@gmail.com\",\r\n    \"senha\": \"123admin\"\r\n}",
+							"raw": "{\r\n    \"usuario\": \"admin@gmail.com\",\r\n    \"senha\": \"123admin\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
