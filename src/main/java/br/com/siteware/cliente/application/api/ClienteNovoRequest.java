@@ -34,7 +34,7 @@ public class ClienteNovoRequest {
 	@Schema(description = "Este é o sexo do cliente", example = "Feminino")
 	private String sexo;
 	@NotNull(message = "Digite novamente a data de nascimento.")
-	@Schema(description = "Esta é a data de nascimento do cliente", example = "12/05/1996")
+	@Schema(description = "Esta é a data de nascimento do cliente", example = "1996-12-05")
 	private String dataNascimento;
 
 }
