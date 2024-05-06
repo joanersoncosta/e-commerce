@@ -40,7 +40,7 @@ public class Carrinho {
 	private Integer quantidade;
 	private Double subTotal;
 	
-	public Carrinho(UUID idCliente, Produto produto, Integer quantidade) {
+	public Carrinho(UUID idCliente, Produto produto, Integer quantidade, Double subTotal) {
 		this.idCarrinho = UUID.randomUUID();
 		this.idCliente = idCliente;
 		this.idProduto = produto.getIdProduto();
@@ -50,7 +50,7 @@ public class Carrinho {
 		this.preco = produto.getPreco();
 		this.quantidade = quantidade;
 		validaQuantidade(quantidade);
-		this.subTotal = calculaSubTotal();
+		this.subTotal = subTotal;
 	}
 
 	private void validaQuantidade(Integer quantidade) {
@@ -59,26 +59,16 @@ public class Carrinho {
 	    }		
 	}
 
-	private Double calculaSubTotal() {
-        if (promocao == PromocaoProduto.LEVE_2_PAGUE_1 && quantidade == 2) {
-            return preco;
-        } else if (promocao == PromocaoProduto.LEVE_3_PAGUE_10_REAIS && quantidade == 3) {
-            return 10.00;
-        } else {
-            return preco * quantidade;
-        }
-    }
-
 	public void pertenceCliente(Cliente clienteEmail) {
 		if (!this.idCliente.equals(clienteEmail.getIdCliente())) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Cliente não autorizado.");
 		}
 	}
 
-	public void atualizaCarrinho(Integer quantidade) {
+	public void atualizaCarrinho(Integer quantidade, Double subTotal) {
 		validaQuantidade(quantidade);
 		this.quantidade = quantidade;
-	    this.subTotal = calculaSubTotal();
+	    this.subTotal = subTotal;
 	}
 	
 }

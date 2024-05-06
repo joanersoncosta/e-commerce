@@ -1,6 +1,6 @@
 package br.com.siteware.carrinho.domain;
 
-public class PromocaoLeve3Pague10ReaisStrategy implements CalculoSubTotalStrategy{
+public class PromocaoLeve3Pague10ReaisStrategy implements PromocaoStrategy{
 
     @Override
     public Double calcularSubTotal(Double preco, int quantidade) {

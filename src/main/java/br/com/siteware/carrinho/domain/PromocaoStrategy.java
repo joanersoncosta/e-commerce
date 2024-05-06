@@ -1,5 +1,5 @@
 package br.com.siteware.carrinho.domain;
 
-public interface CalculoSubTotalStrategy {
+public interface PromocaoStrategy {
     Double calcularSubTotal(Double preco, int quantidade);
 }
