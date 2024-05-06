@@ -80,11 +80,5 @@ public class Carrinho {
 		this.quantidade = quantidade;
 	    this.subTotal = calculaSubTotal();
 	}
-
-	public Integer retornaDiferenca(Integer novaQuantidade) {
-		int diferenca = novaQuantidade - this.quantidade;
-		if (diferenca < 0) {diferenca += Math.abs(diferenca);}
-		return diferenca;
-	}
 	
 }
