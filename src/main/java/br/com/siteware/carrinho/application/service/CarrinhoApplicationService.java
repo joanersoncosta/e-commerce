@@ -11,11 +11,13 @@ import br.com.siteware.carrinho.application.api.CarrinhoListResponse;
 import br.com.siteware.carrinho.application.api.CarrinhoRequest;
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
+import br.com.siteware.carrinho.domain.strategy.CalculadoraSubTotal;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
+import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -38,12 +40,21 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		produto.incrementaProdutosVendidos(carrinhoRequest.getQuantidade());
 		produto.validaStatusEstoque();
 		produtoRepository.salva(produto);
+		Double subTotal = calculaSubTotal(produto.getPromocao(), produto.getPreco(), carrinhoRequest.getQuantidade());
 		Carrinho carrinho = carrinhoRepository
-				.salva(new Carrinho(cliente.getIdCliente(), produto, carrinhoRequest.getQuantidade()));
+				.salva(new Carrinho(cliente.getIdCliente(), produto, carrinhoRequest.getQuantidade(), subTotal));
 		log.info("[finaliza] CarrinhoApplicationService - adicionaProdutoAoCarrinho");
 		return CarrinhoIdResponse.builder().idCarrinho(carrinho.getIdCarrinho()).build();
 	}
-
+	
+	private Double calculaSubTotal(PromocaoProduto promocao, Double preco, int quantidade) {
+		log.info("[inicia] CarrinhoApplicationService - calculaSubTotal");
+		CalculadoraSubTotal calculadoraSubTotal = new CalculadoraSubTotal(promocao);
+		Double subTotal = calculadoraSubTotal.calcularSubTotal(preco, quantidade);
+		log.info("[finaliza] CarrinhoApplicationService - calculaSubTotal");
+		return subTotal;
+	}
+	
 	@Override
 	public List<CarrinhoListResponse> listaCarrinhoDoCliente(String email, UUID idCliente) {
 		log.info("[inicia] CarrinhoApplicationService - listaCarrinhoDoCliente");
@@ -96,7 +107,8 @@ public class CarrinhoApplicationService implements CarrinhoService {
 		produto.validaProdutosVendidosDOEstoque(carrinho.getQuantidade(), quantidade);
 		produto.atualizaProdutosVendidos(carrinho.getQuantidade(), quantidade);
 		produto.validaStatusEstoque();
-		carrinho.atualizaCarrinho(quantidade);
+		Double subTotal = calculaSubTotal(produto.getPromocao(), produto.getPreco(), quantidade);
+		carrinho.atualizaCarrinho(quantidade, subTotal);
 		carrinhoRepository.atualizaCarrinho(carrinho);
 		produtoRepository.salva(produto);
 		log.info("[finaliza] CarrinhoApplicationService - editaCarrinho");

@@ -67,13 +67,13 @@ public class CarrinhoInfraRepository implements CarrinhoRepository {
 
 	@Override
 	public void atualizaCarrinho(Carrinho carrinho) {
-		log.info("[start] CarrinhoInfraRepository - removeCarrinho");
+		log.info("[start] CarrinhoInfraRepository - atualizaCarrinho");
 		try {
 			carrinhoSpringMongoDbRepository.save(carrinho);
 		}catch(APIException e) {
 			throw APIException.build(HttpStatus.BAD_REQUEST, "Erro ao atualizar Produto do carrinho.", e);
 		}
-		log.info("[finish] CarrinhoInfraRepository - removeCarrinho");
+		log.info("[finish] CarrinhoInfraRepository - atualizaCarrinho");
 	}
 
 	@Override
