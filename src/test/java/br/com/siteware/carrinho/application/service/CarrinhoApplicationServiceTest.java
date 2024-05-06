@@ -32,11 +32,13 @@ import br.com.siteware.carrinho.application.api.CarrinhoRequest;
 import br.com.siteware.carrinho.application.api.EditaCarrinhoRequest;
 import br.com.siteware.carrinho.application.repository.CarrinhoRepository;
 import br.com.siteware.carrinho.domain.Carrinho;
+import br.com.siteware.carrinho.domain.strategy.CalculadoraSubTotal;
 import br.com.siteware.cliente.application.repository.ClienteRepository;
 import br.com.siteware.cliente.domain.Cliente;
 import br.com.siteware.handler.APIException;
 import br.com.siteware.produto.application.repository.ProdutoRepository;
 import br.com.siteware.produto.domain.Produto;
+import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 
 @ExtendWith(MockitoExtension.class)
 class CarrinhoApplicationServiceTest {
@@ -58,10 +60,11 @@ class CarrinhoApplicationServiceTest {
 		Produto produto = ProdutoDataHelper.createProduto();
 		Produto produtoMock = mock(Produto.class);
 		CarrinhoRequest request = CarrinhoDataHelper.carrinhoRequest();
-		
+		Double subTotal = calculaSubTotal(produto.getPromocao(), produto.getPreco(), request.getQuantidade());
+
 		when(clienteRepository.detalhaClientePorEmail(any())).thenReturn(cliente);
 		when(produtoRepository.detalhaProdutoPorId(any())).thenReturn(Optional.of(produtoMock));
-		when(carrinhoRepository.salva(any())).thenReturn(new Carrinho(cliente.getIdCliente(), produto, request.getQuantidade()));
+		when(carrinhoRepository.salva(any())).thenReturn(new Carrinho(cliente.getIdCliente(), produto, request.getQuantidade(), subTotal));
 
 		CarrinhoIdResponse response = carrinhoApplicationService.adicionaProdutoAoCarrinho(email, request);
 
@@ -77,6 +80,12 @@ class CarrinhoApplicationServiceTest {
 		assertEquals(CarrinhoIdResponse.class, response.getClass());
 	}
 	
+	private Double calculaSubTotal(PromocaoProduto promocao, Double preco, Integer quantidade) {
+		CalculadoraSubTotal calculadoraSubTotal = new CalculadoraSubTotal(promocao);
+		Double subTotal = calculadoraSubTotal.calcularSubTotal(preco, quantidade);
+		return subTotal;
+	}
+
 	@Test
 	@DisplayName("Adiciona Produto com IdProduto Invalido, retorna erro")
 	void adicionaProdutoAoCarrinho_comIdProdutoInvalido_retornaErro() {
