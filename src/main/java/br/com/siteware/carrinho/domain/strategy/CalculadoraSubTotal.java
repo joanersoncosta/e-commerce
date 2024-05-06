@@ -1,4 +1,4 @@
-package br.com.siteware.carrinho.domain;
+package br.com.siteware.carrinho.domain.strategy;
 
 import br.com.siteware.produto.domain.enuns.PromocaoProduto;
 import lombok.AccessLevel;

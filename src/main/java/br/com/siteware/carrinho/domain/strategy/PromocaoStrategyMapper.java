@@ -1,4 +1,4 @@
-package br.com.siteware.carrinho.domain;
+package br.com.siteware.carrinho.domain.strategy;
 
 import java.util.HashMap;
 import java.util.Map;

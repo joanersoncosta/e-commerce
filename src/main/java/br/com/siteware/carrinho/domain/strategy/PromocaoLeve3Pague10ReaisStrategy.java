@@ -1,4 +1,4 @@
-package br.com.siteware.carrinho.domain;
+package br.com.siteware.carrinho.domain.strategy;
 
 public class PromocaoLeve3Pague10ReaisStrategy implements PromocaoStrategy{
 
