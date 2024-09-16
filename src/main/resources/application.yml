@@ -8,3 +8,12 @@ spring:
       authentication-database: admin
       uri: ${MONGO_DB_URI:mongodb+srv://sitewareDB:tPl8WGO7R2Y4TSfP@wakandadev.cjsar7m.mongodb.net/sitewareDB?retryWrites=true&w=majority}
       auto-index-creation: true
+
+springdoc:
+  swagger-ui:
+    path: /public/swagger
+
+e-commerce:    
+  jwt:
+    expiracao: ${JWT_TEMPO_EXPIRACAO:15}
+    chave: ${JWT_CHAVE:123456}     
